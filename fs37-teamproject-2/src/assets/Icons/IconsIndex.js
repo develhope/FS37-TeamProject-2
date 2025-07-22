@@ -1,0 +1,15 @@
+export { ReactComponent as ArrowLeftOutlineIcon } from './cuida--arrow-left-outline.svg';
+export { ReactComponent as ArrowRightOutlineIcon } from './cuida--arrow-right-outline.svg';
+export { ReactComponent as BlockOutlineIcon } from './cuida--block-outline.svg';
+export { ReactComponent as BuildingOutlineIcon } from './cuida--building-outline.svg';
+export { ReactComponent as CalendarOutlineIcon } from './cuida--calendar-outline.svg';
+export { ReactComponent as ChatBubbleOutlineIcon } from './cuida--chatbubble-outline.svg';
+export { ReactComponent as ChatBubblesOutlineIcon } from './cuida--chatbubbles-outline.svg';
+export { ReactComponent as CheckboxCheckedOutlinedIcon } from './cuida--checkbox-checked-outlined.svg';
+export { ReactComponent as ClipboardTextOutlineIcon } from './cuida--clipboard-text-outline.svg';
+export { ReactComponent as ClockOutlineIcon } from './cuida--clock-outline.svg';
+export { ReactComponent as StethoscopeOutlineIcon } from './cuida--stethoscope-outline.svg';
+export { ReactComponent as SyringeOutlineIcon } from './cuida--syringe-outline.svg';
+export { ReactComponent as TestTubeOutlineIcon } from './cuida--test-tube-outline.svg';
+export { ReactComponent as TrashOutlineIcon } from './cuida--trash-outline.svg';
+export { ReactComponent as XOutlineIcon } from './cuida--x-outline.svg';
