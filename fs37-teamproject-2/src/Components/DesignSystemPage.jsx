@@ -12,7 +12,7 @@ const modules = import.meta.glob('/src/assets/Icons/*.svg', {
   import: 'default', // ottieni l'URL finale
 });
 
-// Quindi modules diventa un oggetto che contiene tutti i percorsi dei file in icons come elementi. Da lì Object.entries(modules) per iterare e mostrare le icone con <img src={url} />
+// Quindi modules diventa un oggetto che contiene tutti i percorsi dei file in icons come elementi. Da lì Object.values(modules) per iterare e mostrare le icone con <img src={url} />
 
 const icons = Object.values(modules);
 
