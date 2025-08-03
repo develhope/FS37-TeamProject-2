@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // import di Components e Pages
-import MenuNavigazione from './components/MenuNavigazione';
+import MenuNavigazione from './Components/MenuNavigazione';
 import LandingPage from './Pages/LandingPage';
 import Registrazione from './pages/Registrazione';
 import Login from './pages/Login';
