@@ -1,42 +1,35 @@
 import { useState } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import AuthProvider from "./Context/AuthContext";
+import Private from "./Components/Private";
+
 
 // import di Components e Pages
 import MenuNavigazione from './Components/MenuNavigazione';
 import LandingPage from './Pages/LandingPage';
-import Registrazione from './pages/Registrazione';
-import Login from './pages/Login';
-import Logout from './pages/Logout';
-import ConfermaOTP from './pages/ConfermaOTP';
-import Dashboard from './pages/Dashboard';
+import Registrazione from './Pages/Registrazione';
+import Login from './Pages/Login';
+import Logout from './Pages/Logout';
+import ConfermaOTP from './Pages/ConfermaOTP';
+import Dashboard from './Pages/Dashboard';
 
 // import di rotte secondarie nella pagina dei servizi
-import LayoutServizi from './pages/Servizi/LayoutServizi';
-import Documentazione from './pages/Servizi/Documentazione';
-import ASLPiuVicina from './pages/Servizi/ASLPiuVicina';
-import MedicoBase from './pages/Servizi/MedicoBase';
-import NecessitaSpeciali from './pages/Servizi/NecessitaSpeciali';
-import Prenotazioni from './pages/Servizi/Prenotazioni';
-
-import Contatti from './pages/Contatti';
-
-// Hook per autenticazione
-import { useAuth } from './hooks/useAuth';
-
-// Wrapper per route private
-const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
-};
+import LayoutServizi from './Pages/Servizi/LayoutServizi';
+import Documentazione from './Pages/Servizi/Documentazione';
+import ASLPiuVicina from './Pages/Servizi/ASLPiuVicina';
+import MedicoBase from './Pages/Servizi/MedicoBase';
+import NecessitaSpeciali from './Pages/Servizi/NecessitaSpeciali';
+import Prenotazioni from './Pages/Servizi/Prenotazioni';
+import Contatti from './Pages/Contatti';
 
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>
       <BrowserRouter>
+      <AuthProvider>
       {/* Schermata di apertura del menu di navigazione */}
       <MenuNavigazione />
 
@@ -58,9 +51,9 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <PrivateRoute>
+            <Private>
               <Dashboard />
-            </PrivateRoute>
+            </Private>
           }
         />
 
@@ -68,9 +61,9 @@ function App() {
         <Route
           path="/servizi"
           element={
-            <PrivateRoute>
+            <Private>
               <LayoutServizi />
-            </PrivateRoute>
+            </Private>
           }
         >
           <Route index element={<Navigate to="documentazione" replace />} />
@@ -87,6 +80,7 @@ function App() {
         {/* Rotta di fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
     </>
   );
