@@ -8,10 +8,11 @@ const Footer = () => {
       id="contatti"
       className="bg-[#1F2937] text-white py-12 font-poppins"
     >
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 ">
+        {/* Griglia per mobile (colonna singola di default) e desktop (3 colonne) */}
+        <div className="grid md:grid-cols-3 gap-8 text-center">
           <div>
-            <div className="flex items-center space-x-3 mb-4">
+            <div className="flex items-center justify-center space-x-3 mb-4">
               <img src={Logo} alt="Logo MiCurApp" className="h-10 w-auto" />
               <span className="text-xl font-bold">MiCurApp</span>
             </div>
@@ -23,15 +24,15 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4 text-[#FFFDD0]">Contatti</h3>
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <Phone size={16} className="text-[#006450]" />
                 <span className="text-gray-300">+39 02 1234567</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <Mail size={16} className="text-[#006450]" />
                 <span className="text-gray-300">micurapp@gmail.com</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <MapPin size={16} className="text-[#006450]" />
                 <span className="text-gray-300">Develhope, Italia</span>
               </div>
