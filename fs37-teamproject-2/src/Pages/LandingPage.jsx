@@ -7,6 +7,7 @@ import FAQSection from "../Components/FAQSection";
 import Footer from "../Components/Footer";
 
 
+
 const LandingPage = () => {
   return (
     <div className="min-h-screen w-full bg-[#FFFFF0] font-poppins">

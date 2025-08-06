@@ -3,9 +3,11 @@ import { Menu, X, LogIn, UserPlus } from "lucide-react";
 import { Button } from "./Button";
 import Logo from "../assets/Logo/Logo-app.png";
 
+
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
 
   useEffect(() => {
     if (mobileMenuOpen) {
