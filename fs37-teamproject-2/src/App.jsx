@@ -10,7 +10,6 @@ import MenuNavigazione from './Components/MenuNavigazione';
 import LandingPage from './Pages/LandingPage';
 import Registrazione from './Pages/Registrazione';
 import Login from './Pages/Login';
-import Logout from './Pages/Logout';
 import ConfermaOTP from './Pages/ConfermaOTP';
 import Dashboard from './Pages/Dashboard';
 
@@ -40,10 +39,9 @@ function App() {
         {/* Registrazione */}
         <Route path="/registrazione" element={<Registrazione />} />
 
-        {/* Login e Logout con ID dinamico */}
-        <Route path="/login/:userId" element={<Login />} />
-        <Route path="/logout/:userId" element={<Logout />} />
-
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+        
         {/* Conferma OTP */}
         <Route path="/conferma-otp/:userId" element={<ConfermaOTP />} />
 
