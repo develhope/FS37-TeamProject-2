@@ -9,11 +9,22 @@ function Registrazione() {
                 [name]: value
             }
         ))
+ 
+    }
+    async function handleRegistrazione () {
+      try {
+        const result = await fetch("http://localhost:3000/registrazione", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({utente: user})}) 
+        const data = await result.json()
+        console.log (data.message)
+      }
+      catch (error) {
+        console.error(error)
+      }
     }
     return(
         <>
          <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
-                <form className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
+                <form className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md" onSubmit={handleRegistrazione}>
                   <h2 className="text-3xl font-semibold text-center mb-6">Accedi al tuo account</h2>
                   <div className="space-y-4">
                     <input onChange={handleChange}
