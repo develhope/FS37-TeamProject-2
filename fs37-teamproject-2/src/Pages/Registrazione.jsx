@@ -1,5 +1,7 @@
+import { useState } from "react";
+ const style = "w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-[#006450] hover:border-[#006450] outline-none";
 function Registrazione() {
-    const style = "w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-[#006450] hover:border-[#006450] outline-none";
+   
     const [user, setUser] = useState({});
     function handleChange(e) {
         const {name, value} = e.target;
@@ -21,10 +23,21 @@ function Registrazione() {
         console.error(error)
       }
     }
+    async function handleRegistrazione (e) {
+      e.preventDefault();
+      try {
+        const result = await fetch("http://localhost:3000/registrazione", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({utente: user})}) 
+        const data = await result.json()
+        console.log (data.message)
+      }
+      catch (error) {
+        console.error(error)
+      }
+    }
     return(
         <>
          <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
-                <form className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md" onSubmit={handleRegistrazione}>
+                <form className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
                   <h2 className="text-3xl font-semibold text-center mb-6">Accedi al tuo account</h2>
                   <div className="space-y-4">
                     <input onChange={handleChange}
