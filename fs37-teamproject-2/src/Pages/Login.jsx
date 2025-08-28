@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -81,9 +81,9 @@ function Login() {
 
           <p className="text-center text-sm text-gray-500 mt-6">
             Non hai un account?{' '}
-            <a href="#" className="text-[#006450] font-medium hover:underline">
+            <Link to="/registrazione" className="text-[#006450] font-medium hover:underline">
               Registrati
-            </a>
+            </Link>
           </p>
         </div>
       </main>

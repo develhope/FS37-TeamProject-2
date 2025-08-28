@@ -1,8 +1,10 @@
 import React from "react";
 import { UserPlus, LogIn } from "lucide-react";
 import { Button } from "./Button";
+import { useAuth } from "../Context/AuthContext";
 
 const HeroSection = () => {
+  const { naviga } = useAuth();
   return (
     <section
       id="home"
@@ -21,13 +23,14 @@ const HeroSection = () => {
           <Button 
             label="primary" 
             className="cursor-pointer px-8 py-4 transform hover:scale-105 font-semibold"
-          >
+          operazione={()=> naviga('/registrazione')}>
             <UserPlus size={20} />
             Registrati Ora
           </Button>
           <Button 
             label="tertiary" 
             className="cursor-pointer px-8 py-4 hover:scale-105 font-semibold"
+            operazione={()=> naviga('/login')}
           >
             <LogIn size={20} />
             Accedi
