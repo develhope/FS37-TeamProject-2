@@ -6,6 +6,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
 import Logo from "../assets/Logo/Logo-app.png";
 import { Button } from "../Components/Button";
+import { Input } from "../Components/Input"
 
 function Login() {
 const navigate = useNavigate();
@@ -39,17 +40,17 @@ const [password, setPassword] = useState('');
         <div className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
           <h2 className="text-3xl font-semibold text-center mb-6">Accedi al tuo account</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
+            <Input
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Email"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-[#006450] hover:border-[#006450] outline-none"
+              mode={"defaultInput"}
             />
-            <input
+            <Input
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="Password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-[#006450] hover:border-[#006450] outline-none"
+              mode={"defaultInput"}
             />
           <div className="text-right mt-2 mb-6">
             <a href="#" className="text-sm text-[#006450] hover:underline">
