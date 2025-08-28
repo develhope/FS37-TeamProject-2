@@ -14,13 +14,28 @@ function AuthProvider({ children }) {
   );
   const [message, setMessage] = useState(``);
 
-  const login = (userData) => setUser(userData);
-  const logout = () => setUser(null);
-
-  const navigate = useNavigate();
-  function naviga(path) {
+   const navigate = useNavigate();
+    function naviga(path) {
     navigate(path);
   }
+
+  const login = (email, password) => {
+   const userExist = users.find((x) => x.email === email && x.password === password);
+    if (userExist) {
+      setUser(userExist);
+      setMessage(``);
+      setTimeout(() => {
+      navigate(`/dashboard`)
+    }, 2000)
+    } else {
+      setMessage(`Credenziali errate`);
+    }
+  }
+  const logout = () => setUser(null);
+
+  useEffect (() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user])
 
   function registrazione(userData) {
     const userExist = users.find((x) => x.email === userData.email);
@@ -40,7 +55,7 @@ function AuthProvider({ children }) {
       }*/ // quando ci sara' la logica del backend possiamo scommentarlo!
   }
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(users)); //aggiornamento collaterale con users
+    localStorage.setItem("users", JSON.stringify(users)); //aggiornamento collaterale con users
   }, [users]);
   return (
     <AuthContext.Provider

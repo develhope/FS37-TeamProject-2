@@ -5,25 +5,20 @@ import { useParams } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
 import Logo from "../assets/Logo/Logo-app.png";
+import { Button } from "../Components/Button";
 
 function Login() {
-//   const navigate = useNavigate();
-//   const { login } = useAuth();
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
+const navigate = useNavigate();
+const { login } = useAuth();
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
 //   const { userId } = useParams();
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const userData = { userId, email, password };
-//     try {
-//     await login(userData);
-//     navigate({ replace: true });
-//   }
-//       catch (err) {
-//       console.error('Errore di login:', err);
-//     }
-//   };
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    login(email, password)
+    
+  };
 
 
   return (
@@ -43,27 +38,25 @@ function Login() {
       <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
         <div className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
           <h2 className="text-3xl font-semibold text-center mb-6">Accedi al tuo account</h2>
-          <div className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <input
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Email"
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-[#006450] hover:border-[#006450] outline-none"
             />
             <input
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="Password"
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-[#006450] hover:border-[#006450] outline-none"
             />
-          </div>
           <div className="text-right mt-2 mb-6">
             <a href="#" className="text-sm text-[#006450] hover:underline">
               Password dimenticata?
             </a>
           </div>
-          <button className="w-full bg-[#006450] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#00503D] transition">
-            Accedi
-          </button>
-
+          <Button label= "primary" type="submit">Login</Button>
           <div className="flex items-center my-6">
             <hr className="flex-grow border-t border-gray-300" />
             <span className="mx-2 text-gray-400">oppure</span>
@@ -85,35 +78,11 @@ function Login() {
               Registrati
             </Link>
           </p>
+          </form>
         </div>
       </main>
     </div>
-       {/* <div>
-      <h2>Benvenuto, {userId} </h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div> */}
+       
     </>
     
   );
