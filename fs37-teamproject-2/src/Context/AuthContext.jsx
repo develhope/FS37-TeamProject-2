@@ -1,17 +1,51 @@
 // Nel contesto, accedo allo stato di login di un utente da un qualsiasi componente
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
+  const [users, setUsers] = useState(
+    JSON.parse(localStorage.getItem("users")) || []
+  );
+  const [message, setMessage] = useState(``);
 
   const login = (userData) => setUser(userData);
   const logout = () => setUser(null);
 
+  const navigate = useNavigate();
+  function naviga(path) {
+    navigate(path);
+  }
+
+  function registrazione(userData) {
+    const userExist = users.find((x) => x.email === userData.email);
+    if (!userExist) {
+      setUsers([...users, userData]);
+      setMessage(``);
+    } else {
+      setMessage(`Email gia' registrata`);
+    }
+    /*try {
+        const result = await fetch("http://localhost:3000/registrazione", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({utente: user})}) 
+        const data = await result.json()
+        console.log (data.message)
+      }
+      catch (error) {
+        console.error(error)
+      }*/ // quando ci sara' la logica del backend possiamo scommentarlo!
+  }
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(users)); //aggiornamento collaterale con users
+  }, [users]);
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, registrazione, message, naviga }}
+    >
       {children}
     </AuthContext.Provider>
   );

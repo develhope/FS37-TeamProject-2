@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Menu, X, LogIn, UserPlus } from "lucide-react";
 import { Button } from "./Button";
 import Logo from "../assets/Logo/Logo-app.png";
-
+import { useAuth } from "../Context/AuthContext";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
+  const { naviga } = useAuth();
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -76,11 +76,19 @@ const Header = () => {
 
             {/* Bottoni Login/Registrazione */}
             <div className="hidden md:flex items-center gap-2">
-              <Button label="tertiary" className="cursor-pointer">
+              <Button
+                label="tertiary"
+                className="cursor-pointer"
+                operazione={() => naviga("/login")}
+              >
                 <LogIn size={18} />
                 <span>Accedi</span>
               </Button>
-              <Button label="primary" className="cursor-pointer">
+              <Button
+                label="primary"
+                className="cursor-pointer"
+                operazione={() => naviga("/registrazione")}
+              >
                 <UserPlus size={18} />
                 <span>Registrati</span>
               </Button>
