@@ -30,13 +30,14 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
       <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
         <form onSubmit={handleRegistrazione}
           className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md"
-          
+          autoComplete="off"
         >
           <h2 className="text-3xl font-semibold text-center mb-6">
             Accedi al tuo account
           </h2>
          {step === 1 ? 
-          <><div className="space-y-4">
+          <><div className="space-y-4" key={"step1"}>
+            <label for="email">Email:</label>
             <Input
               onChange={handleChange}
               type="email"
@@ -45,6 +46,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Email"
               mode="defaultInput"
             />
+            <label for="password">Password:</label>
             <Input
               onChange={handleChange}
               type="password"
@@ -53,6 +55,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Password"
               mode="defaultInput"
             />
+            <label for="nome">Nome:</label>
             <Input
               onChange={handleChange}
               type="text"
@@ -61,6 +64,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Nome"
               mode="defaultInput"
             />
+            <label for="cognome">Cognome:</label>
             <Input
               onChange={handleChange}
               type="text"
@@ -69,6 +73,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Cognome"
               mode="defaultInput"
             />
+            <label for="telefono">Telefono:</label>
             <Input
             onChange={handleChange}
               type="tel"
@@ -79,12 +84,13 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
             />
           </div>
 
-          <Button label="primary" operazione={()=>setStep(2)}>
+          <Button label="primary" type={"button"} operazione={()=>setStep(2)}>
             Avanti
           </Button>
           </>
           :
-          <><div className="space-y-4">
+          <><div className="space-y-4" key={"step2"}>
+            <label for="codiceFiscale">Codice Fiscale:</label>
             <Input
               onChange={handleChange}
               type="text"
@@ -93,6 +99,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Codice Fiscale"
               mode="defaultInput"
             />
+            <label for="dataNascita">Data di nascita:</label>
             <Input
               onChange={handleChange}
               type="date"
@@ -101,6 +108,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Data di Nascita"
               mode="defaultInput"
             />
+            <label for="luogoNascita">Luogo di nascita:</label>
             <Input
               onChange={handleChange}
               type="text"
@@ -109,6 +117,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="Città di Nascita"
               mode="defaultInput"
             />
+            <label for="indirizzo">Indirizzo:</label>
             <Input
               onChange={handleChange}
               type="text"
@@ -117,6 +126,7 @@ useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
               placeholder="indirizzo"
               mode="defaultInput"
             />
+            <label for="cap">CAP:</label>
             <Input
             onChange={handleChange}
               type="text"
