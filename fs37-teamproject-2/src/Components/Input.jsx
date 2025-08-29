@@ -5,13 +5,15 @@ const typeInput= {
   errorInput: "w-full border border-red-500 rounded px-3 py-2 focus:border-[#006450] placeholder-gray-800 text-gray-800",
   hoverInput: "w-full border border-gray-300 rounded px-3 py-2 hover:border-[#006450] placeholder-gray-800 text-gray-800"
 }
-export const Input = ({ type, placeholder, onChange, mode }) => {
+export const Input = ({ type, placeholder, onChange, mode, name, required }) => {
   if(mode === "defaultInput"){
    return <input
     className={typeInput.defaultInput}
     placeholder={placeholder}
     onChange={onChange}
     type= {type}
+    name={name}
+    required= {required}
   />
   } else if(mode === "disabledInput"){
     return <input
@@ -19,6 +21,8 @@ export const Input = ({ type, placeholder, onChange, mode }) => {
       placeholder={placeholder}
       disabled
       type= {type}
+      name={name}
+    
     />
   } else if(mode === "errorInput"){
     return <input
@@ -26,6 +30,8 @@ export const Input = ({ type, placeholder, onChange, mode }) => {
       placeholder={placeholder}
       onChange={onChange}
       type= {type}
+      name={name}
+    required= {required}
     />
   } else if(mode === "hoverInput"){
     return <input
@@ -33,6 +39,8 @@ export const Input = ({ type, placeholder, onChange, mode }) => {
       placeholder={placeholder}
       onChange={onChange}
       type= {type}
+      name={name}
+    required= {required}
     />
   }
 };

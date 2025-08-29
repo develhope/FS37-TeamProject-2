@@ -36,7 +36,7 @@ const [password, setPassword] = useState('');
     </p>
   </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
-          <h2 className="text-3xl font-semibold text-center mb-6">Accedi al tuo account</h2>
+          <h2 className="text-3xl font-semibold text-center mb-6 text-gray-600">Accedi al tuo account</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <Input
               onChange={(e) => setEmail(e.target.value)}
@@ -51,10 +51,11 @@ const [password, setPassword] = useState('');
               mode={"defaultInput"}
             />
           <div className="flex justify-between items-center mt-2 mb-6">
-          <Button label= "primary" type="submit" className="w-fit mx-auto">Login</Button>
-          <a href="#" className="text-sm text-[#006450] hover:underline">
+            <Link to="#" className="text-sm text-[#006450] hover:underline">
               Password dimenticata?
-            </a>
+            </Link>
+          <Button label= "primary" type="submit" className="w-fit mx-auto">Login</Button>
+          
           </div>
           
           <div className="flex items-center my-6">
@@ -64,10 +65,10 @@ const [password, setPassword] = useState('');
           </div>
 
           <div className="flex space-x-4">
-            <button className="flex-1 flex items-center justify-center border border-gray-300 px-4 py-2 rounded-lg hover:border-[#006450] transition">
+            <button className="flex-1 flex items-center justify-center border border-gray-300 px-4 py-2 rounded-lg hover:border-[#006450] text-gray-600 transition">
               <FcGoogle size={20} className="mr-2" /> Google
             </button>
-            <button className="flex-1 flex items-center justify-center border border-gray-300 px-4 py-2 rounded-lg hover:border-[#006450] transition">
+            <button className="flex-1 flex items-center justify-center border border-gray-300 px-4 py-2 rounded-lg hover:border-[#006450] text-gray-600 transition">
               <FaFacebookF size={20} color="#006450" className="mr-2" /> Facebook
             </button>
           </div>

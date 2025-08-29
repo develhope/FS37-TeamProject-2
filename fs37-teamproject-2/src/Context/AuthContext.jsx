@@ -41,7 +41,11 @@ function AuthProvider({ children }) {
     const userExist = users.find((x) => x.email === userData.email);
     if (!userExist) {
       setUsers([...users, userData]);
-      setMessage(``);
+      setMessage(`Registrazione avvenuta con successo`);
+      setTimeout(()=>{ 
+        setMessage(``);
+        navigate("/login");
+      },3000)
     } else {
       setMessage(`Email gia' registrata`);
     }
