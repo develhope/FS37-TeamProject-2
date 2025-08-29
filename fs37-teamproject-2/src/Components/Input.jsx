@@ -14,6 +14,7 @@ export const Input = ({ type, placeholder, onChange, mode, name, required }) => 
     type= {type}
     name={name}
     required= {required}
+    autoComplete='off'
   />
   } else if(mode === "disabledInput"){
     return <input

@@ -7,7 +7,7 @@ import { Input } from "../Components/Input";
 
 function Registrazione() {
   const { registrazione, message } = useAuth();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("step")) || {});
   const[step, setStep]= useState(1);
   function handleChange(e) {
     const { name, value } = e.target;
@@ -16,17 +16,21 @@ function Registrazione() {
       [name]: value,
     }));
   }
+
+useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
+
   function handleRegistrazione(e) {
     e.preventDefault();
     registrazione(user);
+    localStorage.removeItem("step");
   }
   
   return (
     <>
       <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
-        <form
+        <form onSubmit={handleRegistrazione}
           className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md"
-          onSubmit={handleRegistrazione}
+          
         >
           <h2 className="text-3xl font-semibold text-center mb-6">
             Accedi al tuo account
