@@ -19,14 +19,13 @@ function Registrazione() {
   });
 
   const [step, setStep] = useState(1);
-  const [message, setMessage] = useState(""); // messaggio di successo o errore
+  const [message, setMessage] = useState("");
   const [emailExists, setEmailExists] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
 
-    // Reset messaggi email già registrata quando l'utente modifica l'email
     if (name === "email") {
       setEmailExists(false);
       setMessage("");
@@ -56,7 +55,6 @@ function Registrazione() {
     user.cap;
 
   const handleNextStep = () => {
-    // Controllo email già registrata prima di andare allo Step 2
     const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
     const emailAlreadyUsed = existingUsers.some(u => u.email === user.email);
 
@@ -64,7 +62,6 @@ function Registrazione() {
       setEmailExists(true);
       setMessage("L'email è già stata registrata");
 
-      // Fai scomparire il messaggio dopo 2 secondi
       setTimeout(() => {
         setMessage("");
         setEmailExists(false);
@@ -81,21 +78,16 @@ function Registrazione() {
 
     if (!isStep2Complete) return;
 
-    // Salvo il nuovo utente
     const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
     const updatedUsers = [...existingUsers, user];
     localStorage.setItem("users", JSON.stringify(updatedUsers));
 
-    // Pulisco lo step temporaneo
     localStorage.removeItem("step");
 
-    // Messaggio di successo
     setMessage("La registrazione è andata a buon fine");
 
-    // Richiamo eventuale logica del contesto
     registrazione(user);
 
-    // Dopo 3 secondi, reindirizzo alla login
     setTimeout(() => {
       setMessage("");
       navigate("/login");
@@ -193,7 +185,6 @@ function Registrazione() {
             />
           </div>
 
-          {/* Messaggio email già registrata */}
           {message && (
             <p className="text-gray-500 font-bold text-center mt-2">{message}</p>
           )}
