@@ -1,169 +1,327 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../Context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Components/Button";
 import { Input } from "../Components/Input";
 
-
 function Registrazione() {
-  const { registrazione, message } = useAuth();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("step")) || {});
-  const[step, setStep]= useState(1);
+  const { registrazione } = useAuth();
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(() => {
+    try {
+      const storedData = localStorage.getItem("step");
+      return storedData ? JSON.parse(storedData) : {};
+    } catch (error) {
+      console.error("Errore parsing localStorage:", error);
+      return {};
+    }
+  });
+
+  const [step, setStep] = useState(1);
+  const [message, setMessage] = useState(""); // messaggio di successo o errore
+  const [emailExists, setEmailExists] = useState(false);
+
   function handleChange(e) {
     const { name, value } = e.target;
-    setUser((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setUser((prev) => ({ ...prev, [name]: value }));
+
+    // Reset messaggi email già registrata quando l'utente modifica l'email
+    if (name === "email") {
+      setEmailExists(false);
+      setMessage("");
+    }
   }
 
-useEffect(() => localStorage.setItem("step", JSON.stringify(user)), [user])
+  useEffect(() => {
+    localStorage.setItem("step", JSON.stringify(user));
+  }, [user]);
 
-  function handleRegistrazione(e) {
+  const isEmailValid = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || "");
+
+  const isStep1Complete =
+    user.email &&
+    isEmailValid(user.email) &&
+    user.password &&
+    user.nome &&
+    user.cognome &&
+    user.telefono &&
+    !emailExists;
+
+  const isStep2Complete =
+    user.codiceFiscale &&
+    user.dataNascita &&
+    user.luogoNascita &&
+    user.indirizzo &&
+    user.cap;
+
+  const handleNextStep = () => {
+    // Controllo email già registrata prima di andare allo Step 2
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const emailAlreadyUsed = existingUsers.some(u => u.email === user.email);
+
+    if (emailAlreadyUsed) {
+      setEmailExists(true);
+      setMessage("L'email è già stata registrata");
+
+      // Fai scomparire il messaggio dopo 2 secondi
+      setTimeout(() => {
+        setMessage("");
+        setEmailExists(false);
+      }, 2000);
+
+      return;
+    }
+
+    setStep(2);
+  };
+
+  const handleRegistrazione = (e) => {
     e.preventDefault();
-    registrazione(user);
+
+    if (!isStep2Complete) return;
+
+    // Salvo il nuovo utente
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const updatedUsers = [...existingUsers, user];
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+    // Pulisco lo step temporaneo
     localStorage.removeItem("step");
-  }
-  
+
+    // Messaggio di successo
+    setMessage("La registrazione è andata a buon fine");
+
+    // Richiamo eventuale logica del contesto
+    registrazione(user);
+
+    // Dopo 3 secondi, reindirizzo alla login
+    setTimeout(() => {
+      setMessage("");
+      navigate("/login");
+    }, 3000);
+  };
+
   return (
-    <>
-      <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
-        <form onSubmit={handleRegistrazione}
-          className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md"
-          autoComplete="off"
-        >
-          <h2 className="text-3xl font-semibold text-center mb-6">
-            Accedi al tuo account
-          </h2>
-         {step === 1 ? 
-          <><div className="space-y-4" key={"step1"}>
-            <label for="email">Email:</label>
+    <main className="flex-1 flex items-center justify-center p-8 bg-gray-50">
+      <form
+        onSubmit={handleRegistrazione}
+        className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md"
+        autoComplete="off"
+      >
+        <h2 className="text-3xl font-semibold text-center mb-6">
+          Registra il tuo account
+        </h2>
+
+        {/* STEP 1 */}
+        <div className={step === 1 ? "" : "hidden"}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
+              Email:
+            </label>
             <Input
-              onChange={handleChange}
-              type="email"
+              id="email"
               name="email"
-              required={true}
+              type="email"
               placeholder="Email"
+              value={user.email || ""}
+              onChange={handleChange}
               mode="defaultInput"
             />
-            <label for="password">Password:</label>
+            {user.email && !isEmailValid(user.email) && (
+              <p className="text-red-500 text-sm mt-1">Email non valida</p>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
+              Password:
+            </label>
             <Input
-              onChange={handleChange}
-              type="password"
+              id="password"
               name="password"
-              required={true}
+              type="password"
               placeholder="Password"
+              value={user.password || ""}
+              onChange={handleChange}
               mode="defaultInput"
             />
-            <label for="nome">Nome:</label>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="nome" className="block text-gray-700 font-medium mb-1">
+              Nome:
+            </label>
             <Input
-              onChange={handleChange}
-              type="text"
+              id="nome"
               name="nome"
-              required={true}
+              type="text"
               placeholder="Nome"
+              value={user.nome || ""}
+              onChange={handleChange}
               mode="defaultInput"
             />
-            <label for="cognome">Cognome:</label>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="cognome" className="block text-gray-700 font-medium mb-1">
+              Cognome:
+            </label>
             <Input
-              onChange={handleChange}
-              type="text"
+              id="cognome"
               name="cognome"
-              required={true}
+              type="text"
               placeholder="Cognome"
+              value={user.cognome || ""}
+              onChange={handleChange}
               mode="defaultInput"
             />
-            <label for="telefono">Telefono:</label>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="telefono" className="block text-gray-700 font-medium mb-1">
+              Telefono:
+            </label>
             <Input
-            onChange={handleChange}
-              type="tel"
+              id="telefono"
               name="telefono"
-              required={true}
-              placeholder="Numero di telefono"
+              type="tel"
+              placeholder="Telefono"
+              value={user.telefono || ""}
+              onChange={handleChange}
               mode="defaultInput"
             />
           </div>
 
-          <Button label="primary" type={"button"} operazione={()=>setStep(2)}>
-            Avanti
-          </Button>
-          </>
-          :
-          <><div className="space-y-4" key={"step2"}>
-            <label for="codiceFiscale">Codice Fiscale:</label>
-            <Input
-              onChange={handleChange}
-              type="text"
-              name="codiceFiscale"
-              required={true}
-              placeholder="Codice Fiscale"
-              mode="defaultInput"
-            />
-            <label for="dataNascita">Data di nascita:</label>
-            <Input
-              onChange={handleChange}
-              type="date"
-              name="dataNascita"
-              required={true}
-              placeholder="Data di Nascita"
-              mode="defaultInput"
-            />
-            <label for="luogoNascita">Luogo di nascita:</label>
-            <Input
-              onChange={handleChange}
-              type="text"
-              name="luogoNascita"
-              required={true}
-              placeholder="Città di Nascita"
-              mode="defaultInput"
-            />
-            <label for="indirizzo">Indirizzo:</label>
-            <Input
-              onChange={handleChange}
-              type="text"
-              name="indirizzo"
-              required={true}
-              placeholder="indirizzo"
-              mode="defaultInput"
-            />
-            <label for="cap">CAP:</label>
-            <Input
-            onChange={handleChange}
-              type="text"
-              name="cap"
-              required={true}
-              placeholder="Cap"
-              mode="defaultInput"
-            />
-            
-          </div>
-          <Button label="secondary" operazione={()=> setStep(1)} >
-          Indietro
-          </Button>
-          <Button label="primary" type="submit">
-            Registrati
-          </Button>
-          </> }
+          {/* Messaggio email già registrata */}
+          {message && (
+            <p className="text-gray-500 font-bold text-center mt-2">{message}</p>
+          )}
 
-          <div className="flex items-center my-6">
-            <hr className="flex-grow border-t border-gray-300" />
-            <span className="mx-2 text-gray-400">oppure</span>
-            <hr className="flex-grow border-t border-gray-300" />
-          </div>
-
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Hai già un account?{" "}
-            <Link
-              to="/login"
-              className="text-[#006450] font-medium hover:underline"
+          <div className="mt-6 flex justify-center">
+            <Button
+              label="primary"
+              type="button"
+              operazione={handleNextStep}
+              disabled={!isStep1Complete}
             >
-              Effettua il login
-            </Link>
-          </p>
-          {message && <p className="text-grey-600">{message}</p>}
-        </form>
-      </main>
-    </>
+              Avanti
+            </Button>
+          </div>
+        </div>
+
+        {/* STEP 2 */}
+        <div className={step === 2 ? "" : "hidden"}>
+          <div className="mb-4">
+            <label htmlFor="codiceFiscale" className="block text-gray-700 font-medium mb-1">
+              Codice Fiscale:
+            </label>
+            <Input
+              id="codiceFiscale"
+              name="codiceFiscale"
+              type="text"
+              placeholder="Codice Fiscale"
+              value={user.codiceFiscale || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="dataNascita" className="block text-gray-700 font-medium mb-1">
+              Data di nascita:
+            </label>
+            <Input
+              id="dataNascita"
+              name="dataNascita"
+              type="date"
+              value={user.dataNascita || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="luogoNascita" className="block text-gray-700 font-medium mb-1">
+              Luogo di nascita:
+            </label>
+            <Input
+              id="luogoNascita"
+              name="luogoNascita"
+              type="text"
+              placeholder="Luogo di nascita"
+              value={user.luogoNascita || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="indirizzo" className="block text-gray-700 font-medium mb-1">
+              Indirizzo:
+            </label>
+            <Input
+              id="indirizzo"
+              name="indirizzo"
+              type="text"
+              placeholder="Indirizzo"
+              value={user.indirizzo || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="cap" className="block text-gray-700 font-medium mb-1">
+              CAP:
+            </label>
+            <Input
+              id="cap"
+              name="cap"
+              type="text"
+              placeholder="CAP"
+              value={user.cap || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+
+          <div className="flex justify-between items-center gap-2 mt-6">
+            <Button
+              label="secondary"
+              type="button"
+              operazione={() => setStep(1)}
+            >
+              Indietro
+            </Button>
+            <Button
+              label="primary"
+              type="submit"
+              disabled={!isStep2Complete}
+            >
+              Registrati
+            </Button>
+          </div>
+
+          {message && (
+            <p className="text-gray-500 font-bold text-center mt-2">{message}</p>
+          )}
+        </div>
+
+        <div className="flex items-center my-6">
+          <hr className="flex-grow border-t border-gray-300" />
+          <span className="mx-2 text-gray-400">oppure</span>
+          <hr className="flex-grow border-t border-gray-300" />
+        </div>
+
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Hai già un account?{" "}
+          <Link to="/login" className="text-[#006450] font-medium hover:underline">
+            Effettua il login
+          </Link>
+        </p>
+      </form>
+    </main>
   );
 }
 

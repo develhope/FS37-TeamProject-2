@@ -1,10 +1,11 @@
 import React from "react";
 import { UserPlus, LogIn } from "lucide-react";
 import { Button } from "./Button";
-import { useAuth } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
-  const { naviga } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <section
       id="home"
@@ -20,20 +21,21 @@ const HeroSection = () => {
           sanitari pubblici, mettendo al centro il cittadino.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button 
-            label="primary" 
+          <Button
+            label="primary"
             className="cursor-pointer px-8 py-4 transform hover:scale-105 font-semibold"
-          operazione={()=> naviga('/registrazione')}>
+            operazione={() => navigate("/registrazione")}
+          >
             <UserPlus size={20} />
-            Registrati Ora
+            <span>Registrati Ora</span>
           </Button>
-          <Button 
-            label="tertiary" 
-            className="cursor-pointer px-8 py-4 hover:scale-105 font-semibold"
-            operazione={()=> naviga('/login')}
+          <Button
+            label="tertiary"
+            className="cursor-pointer px-8 py-4 transform hover:scale-105 font-semibold"
+            operazione={() => navigate("/login")}
           >
             <LogIn size={20} />
-            Accedi
+            <span>Accedi</span>
           </Button>
         </div>
       </div>

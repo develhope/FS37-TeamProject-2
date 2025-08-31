@@ -11,47 +11,21 @@ const typeButton = {
     "bg-[#006450] text-white px-7 py-2 rounded opacity-50 cursor-not-allowed",
 };
 
-export const Button = ({ label, children, operazione, type }) => {
-  if (label === "primary") {
-    return (
-      <button
-        type={type}
-        onClick={operazione}
-        className={typeButton.primaryButton}
-      >
-        {children || "Primary"}
-      </button>
-    );
-  } else if (label === "secondary") {
-    return (
-      <button
-        type={type}
-        onClick={operazione}
-        className={typeButton.secondaryButton}
-      >
-        {children || "Secondary"}
-      </button>
-    );
-  } else if (label === "tertiary") {
-    return (
-      <button
-        type={type}
-        onClick={operazione}
-        className={typeButton.tertiaryButton}
-      >
-        {children || "Tertiary"}
-      </button>
-    );
-  } else {
-    return (
-      <button
-        type={type}
-        onClick={operazione}
-        className={typeButton.disableButton}
-        disabled
-      >
-        {children || "Disabled"}
-      </button>
-    );
-  }
+export const Button = ({ label, children, operazione, type = "button", disabled }) => {
+  let className = typeButton.disableButton;
+
+  if (label === "primary") className = disabled ? typeButton.disableButton : typeButton.primaryButton;
+  else if (label === "secondary") className = typeButton.secondaryButton;
+  else if (label === "tertiary") className = typeButton.tertiaryButton;
+
+  return (
+    <button
+      type={type}
+      onClick={operazione}
+      className={className}
+      disabled={disabled}
+    >
+      {children || "Button"}
+    </button>
+  );
 };
