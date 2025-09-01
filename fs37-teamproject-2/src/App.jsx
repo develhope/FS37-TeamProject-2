@@ -43,7 +43,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         
         {/* Conferma OTP */}
-        <Route path="/conferma-otp/:userId" element={<ConfermaOTP />} />
+        <Route path="/conferma-otp" element={<ConfermaOTP />} />
 
         {/* Dashboard - Route privata */}
         <Route
@@ -59,18 +59,18 @@ function App() {
         <Route
           path="/servizi"
           element={
-            <Private>
+            
               <LayoutServizi />
-            </Private>
+            
           }
         >
-          <Route index element={<Navigate to="documentazione" replace />} />
-          <Route path="documentazione" element={<Documentazione />} />
+          
           <Route path="asl-piu-vicina" element={<ASLPiuVicina />} />
           <Route path="medico-base" element={<MedicoBase />} />
           <Route path="necessita-speciali" element={<NecessitaSpeciali />} />
           <Route path="prenotazioni" element={<Prenotazioni />} />
         </Route>
+          <Route path="documentazione" element={<Documentazione />} />
 
         {/* Contatti */}
         <Route path="/contatti" element={<Contatti />} />
