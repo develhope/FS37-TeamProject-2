@@ -82,8 +82,6 @@ function Registrazione() {
     const updatedUsers = [...existingUsers, user];
     localStorage.setItem("users", JSON.stringify(updatedUsers));
 
-    localStorage.removeItem("step");
-
     setMessage("La registrazione è andata a buon fine");
 
     registrazione(user);
@@ -92,6 +90,8 @@ function Registrazione() {
       setMessage("");
       navigate("/login");
     }, 3000);
+
+    localStorage.removeItem("step");
   };
 
   return (
