@@ -1,36 +1,16 @@
 import express from "express";
 import cors from "cors";
+import { registrazione, getAll } from "./controllers/authControllers";
 
 const app = express();
 const PORT = 3000;
-const utenti = [];
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-    res.json(utenti);
-})
+app.get("/", getAll)
 
-app.post("/registrazione", (req, res) => {
-const {utente} = req.body;
-if(utente) {
-    utenti.push(utente);
-
-    res.status(201).json({message: "Registrato con successo"});
-} else {
-    res.status(400).json({message: "Errore invio dati"});
-}
-})
-
-
-
-
-
-
-
-
-
+app.post("/registrazione", registrazione) 
 
 app.listen(PORT, () => {
     console.log(`Sever attivo su http://localhost:${PORT}`);
