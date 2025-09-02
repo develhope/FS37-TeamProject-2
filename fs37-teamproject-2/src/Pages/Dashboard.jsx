@@ -41,6 +41,22 @@ function Dashboard() {
     navigate("/login");
   };
 
+  // elimina il servizio prenotato dall'utente corrente
+const handleRemoveServizio = (idServizio) => {
+  const utenti = JSON.parse(localStorage.getItem("users")) || [];
+  const idx = utenti.findIndex(u => u.email === user.email);
+  if (idx === -1) return;
+
+  const curr = utenti[idx];
+  const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idServizio);
+  curr.serviziPrenotati = nuoviServizi;
+
+  localStorage.setItem("users", JSON.stringify(utenti));
+  setUser(curr);          // aggiorna il context Auth
+  setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
+};
+
+
   return (
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="flex justify-between items-center mb-6">
@@ -109,24 +125,59 @@ function Dashboard() {
           )}
         </div>
 
-      {/* Box Servizi prenotati */}
+{/* Box Servizi prenotati */}
 <div className="bg-white rounded-2xl shadow-lg p-6">
   <h2 className="text-2xl font-semibold mb-4">Servizi Prenotati</h2>
+
   {profile.serviziPrenotati && profile.serviziPrenotati.length > 0 ? (
-    <ul className="list-disc pl-5 space-y-2">
-      {profile.serviziPrenotati.map((servizio, index) => (
-        <li key={index}>{servizio}</li>
+    <div className="space-y-4">
+      {profile.serviziPrenotati.map((servizio) => (
+        <div
+          key={servizio.id}
+          className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
+        >
+          <div className="flex-shrink-0">
+            <img
+              src={servizio.icona}
+              alt={`Icona ${servizio.nome}`}
+              className="w-16 h-16 object-contain"
+            />
+          </div>
+
+          <div className="flex-grow space-y-1">
+            <p><strong>Nome:</strong> {servizio.nome}</p>
+            <p><strong>Tipologia:</strong> {servizio.tipologia}</p>
+            <p><strong>Detraibile:</strong> {servizio.detraibilita ? "Sì" : "No"}</p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Button
+              label="secondary"
+              operazione={() => navigate("/servizi/prenotazioni")}
+            >
+              Modifica
+            </Button>
+            <Button
+              label="primary"
+              operazione={() => handleRemoveServizio(servizio.id)}
+            >
+              Elimina
+            </Button>
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   ) : (
     <div className="flex flex-col items-start space-y-4">
       <p>Non hai ancora prenotato alcun servizio.</p>
-      <Button label="primary" operazione={() => navigate("/prenotazione-servizi")}>
+      <Button label="primary" operazione={() => navigate("/servizi/prenotazioni")}>
         Aggiungi Servizi
       </Button>
     </div>
   )}
 </div>
+
+
 
         {/* Box La mia ASL */}
         <div className="bg-white rounded-2xl shadow-lg p-6">
