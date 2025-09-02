@@ -14,11 +14,6 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +27,6 @@ function Login() {
     if (foundUser) {
       login(email, password);
       setError("");
-      navigate("/dashboard"); 
     } else {
       setError("Credenziali errate o inesistenti");
       setTimeout(() => setError(""), 2000); 

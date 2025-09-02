@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as OTPAuth from "otpauth";
 
 const AuthContext = createContext(null);
 
@@ -15,21 +16,38 @@ function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   const login = (email, password) => {
-    const userExist = users.find(
+    const idx = users.findIndex(
       (x) => x.email === email && x.password === password
     );
-    if (userExist) {
-      setUser(userExist);
+    if (idx > -1) {
+      const found = { ...users[idx] };
+
+      // Se l'utente non ha ancora un segreto TOTP, creane uno ora (DEV)
+      if (!found.totpSecretB32) {
+        const secret = new OTPAuth.Secret(); // <-- genera random
+        found.totpSecretB32 = secret.base32;
+        const updated = [...users];
+        updated[idx] = found;
+        setUsers(updated);
+      }
+
+      setUser(found);
       setMessage(``);
-      setTimeout(() => {
-        navigate(`/dashboard`);
-      }, 2000);
+
+      // Salviamo anche un fallback DEV in localStorage (la pagina OTP lo userà se serve)
+      localStorage.setItem("mfa_secret", found.totpSecretB32);
+
+      // Vai alla pagina OTP, e dopo la verifica rientri dove vuoi tu
+      navigate("/conferma-otp?next=/dashboard");
     } else {
       setMessage(`Credenziali errate`);
     }
   };
 
-  const logout = () => setUser(null);
+  const logout = () => {
+    localStorage.removeItem("otp_verified_at");
+    setUser(null);
+  };
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
@@ -38,7 +56,9 @@ function AuthProvider({ children }) {
   function registrazione(userData) {
     const userExist = users.find((x) => x.email === userData.email);
     if (!userExist) {
-      setUsers([...users, userData]);
+     const secret = new OTPAuth.Secret();           // <-- genera random
+     const newUser = { ...userData, totpSecretB32: secret.base32 };
+      setUsers([...users, newUser]);
       setMessage(`Registrazione avvenuta con successo`);
       setTimeout(() => {
         setMessage(``);
