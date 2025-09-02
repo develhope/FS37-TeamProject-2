@@ -10,7 +10,7 @@ import { useAuth } from "../Context/AuthContext";
  */
 
 const VERIFIED_KEY = "otp_verified_at"; // timestamp ms del momento di verifica
-const PERIOD_MS = 30_000; // 30 secondi
+const PERIOD_MS = 60_000; // 60 secondi
 
 function now() {
   return Date.now();
@@ -34,7 +34,7 @@ export default function ConfermaOTP() {
       ? new OTPAuth.TOTP({
           secret: OTPAuth.Secret.fromBase32(secretB32),
           digits: 6,
-          period: 30,
+          period: 60,
           algorithm: "SHA1",
         })
       : null
@@ -91,11 +91,11 @@ export default function ConfermaOTP() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md rounded-2xl shadow-lg bg-white p-6">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">
+      <div className="w-full max-w-md  rounded-2xl shadow-lg bg-white p-6">
+        <h1 className="text-2xl text-center font-semibold text-gray-900 mb-1">
           Verifica OTP
         </h1>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-sm text-center text-gray-600 mb-6">
           Inserisci il codice a 6 cifre generato dall'app di
           autenticazione.
         </p>
