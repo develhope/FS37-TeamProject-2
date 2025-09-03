@@ -89,11 +89,6 @@ function App() {
             >
               <Route path="asl-piu-vicina" element={<ASLPiuVicina />} />
               <Route path="medico-base" element={<MedicoBase />} />
-              
-              <Route
-                path="necessita-speciali"
-                element={<NecessitaSpeciali />}
-              />
               <Route path="documentazione" element={<Documentazione />} />
               <Route path="prenotazioni" element={<Prenotazioni />} />
             </Route>
