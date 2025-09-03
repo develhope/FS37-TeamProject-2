@@ -1,6 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate , useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import AuthProvider from "./Context/AuthContext";
 import Private from "./Components/Private";
 
@@ -21,15 +27,16 @@ import NecessitaSpeciali from "./Pages/Servizi/NecessitaSpeciali";
 import Prenotazioni from "./Pages/Servizi/Prenotazioni";
 import Contatti from "./Pages/Contatti";
 
-
 function RequireOtp({ children }) {
-  const verifiedAt = localStorage.getItem("otp_verified_at");
+  const ts = localStorage.getItem("otp_verified_at");
+  const valid = Boolean(ts); // niente scadenza
   const location = useLocation();
-
-  if (!verifiedAt) {
+  if (!valid) {
     return (
       <Navigate
-        to={`/conferma-otp?next=${encodeURIComponent(location.pathname)}`}
+        to={`/conferma-otp?next=${encodeURIComponent(
+          location.pathname + location.search
+        )}`}
         replace
       />
     );
@@ -71,16 +78,25 @@ function App() {
             />
 
             {/* Servizi - Route nidificate e private */}
-            <Route path="/servizi" element={<LayoutServizi />}>
+            <Route
+              path="/servizi"
+              element={
+                <Private>
+                  <RequireOtp>
+                    <LayoutServizi />
+                  </RequireOtp>
+                </Private>
+              }
+            >
               <Route path="asl-piu-vicina" element={<ASLPiuVicina />} />
               <Route path="medico-base" element={<MedicoBase />} />
               <Route
                 path="necessita-speciali"
                 element={<NecessitaSpeciali />}
               />
+              <Route path="documentazione" element={<Documentazione />} />
               <Route path="prenotazioni" element={<Prenotazioni />} />
             </Route>
-            <Route path="documentazione" element={<Documentazione />} />
 
             {/* Contatti */}
             <Route path="/contatti" element={<Contatti />} />
