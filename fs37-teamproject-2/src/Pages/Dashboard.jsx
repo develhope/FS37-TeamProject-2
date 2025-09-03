@@ -12,8 +12,14 @@ function Dashboard() {
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const currentUser = users.find(u => u.email === user.email);
-    setProfile(currentUser || {});
-  }, [user]);
+
+  if (currentUser) {
+    currentUser.serviziPrenotati = currentUser.serviziPrenotati || [];
+    currentUser.medico = currentUser.medico || null;
+  }
+
+  setProfile(currentUser || {});
+}, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +40,22 @@ function Dashboard() {
     logout();
     navigate("/login");
   };
+
+  // elimina il servizio prenotato dall'utente corrente
+const handleRemoveServizio = (idServizio) => {
+  const utenti = JSON.parse(localStorage.getItem("users")) || [];
+  const idx = utenti.findIndex(u => u.email === user.email);
+  if (idx === -1) return;
+
+  const curr = utenti[idx];
+  const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idServizio);
+  curr.serviziPrenotati = nuoviServizi;
+
+  localStorage.setItem("users", JSON.stringify(utenti));
+  setUser(curr);          // aggiorna il context Auth
+  setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
+};
+
 
   return (
     <main className="min-h-screen p-8 bg-gray-50">
@@ -103,6 +125,60 @@ function Dashboard() {
           )}
         </div>
 
+{/* Box Servizi prenotati */}
+<div className="bg-white rounded-2xl shadow-lg p-6">
+  <h2 className="text-2xl font-semibold mb-4">Servizi Prenotati</h2>
+
+  {profile.serviziPrenotati && profile.serviziPrenotati.length > 0 ? (
+    <div className="space-y-4">
+      {profile.serviziPrenotati.map((servizio) => (
+        <div
+          key={servizio.id}
+          className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
+        >
+          <div className="flex-shrink-0">
+            <img
+              src={servizio.icona}
+              alt={`Icona ${servizio.nome}`}
+              className="w-16 h-16 object-contain"
+            />
+          </div>
+
+          <div className="flex-grow space-y-1">
+            <p><strong>Nome:</strong> {servizio.nome}</p>
+            <p><strong>Tipologia:</strong> {servizio.tipologia}</p>
+            <p><strong>Detraibile:</strong> {servizio.detraibilita ? "Sì" : "No"}</p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Button
+              label="secondary"
+              operazione={() => navigate("/servizi/prenotazioni")}
+            >
+              Modifica
+            </Button>
+            <Button
+              label="primary"
+              operazione={() => handleRemoveServizio(servizio.id)}
+            >
+              Elimina
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="flex flex-col items-start space-y-4">
+      <p>Non hai ancora prenotato alcun servizio.</p>
+      <Button label="primary" operazione={() => navigate("/servizi/prenotazioni")}>
+        Aggiungi Servizi
+      </Button>
+    </div>
+  )}
+</div>
+
+
+
         {/* Box La mia ASL */}
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">La mia ASL</h2>
@@ -111,6 +187,44 @@ function Dashboard() {
           <p><strong>Numero contatto:</strong> 0123-456789</p>
           <Button label= "primary">Cambia ASL</Button>
         </div>
+
+{/* Box Il mio medico di base */}
+<div className="bg-white rounded-2xl shadow-lg p-6">
+  <h2 className="text-2xl font-semibold mb-4">Il mio medico di base</h2>
+
+  {profile.medico ? (
+    <div className="flex space-x-4">
+      <div className="flex-shrink-0">
+        <img
+  src={profile.medico.foto || "https://via.placeholder.com/100"}
+  alt={`Foto di ${profile.medico.nome}`}
+  className="w-24 h-24 rounded-full object-cover border"
+/>
+
+      </div>
+
+      <div className="flex-grow space-y-1">
+        <p><strong>Nome:</strong> {profile.medico.nome} {profile.medico.cognome}</p>
+        <p><strong>Email:</strong> {profile.medico.email}</p>
+        <p><strong>Telefono:</strong> {profile.medico.telefono}</p>
+        <p><strong>Specializzazione:</strong> {profile.medico.specializzazione}</p>
+        <p><strong>Indirizzo:</strong> {profile.medico.indirizzo}, {profile.medico.numero_civico}</p>
+        <p><strong>Città:</strong> {profile.medico.cap} - {profile.medico.citta} ({profile.medico.regione})</p>
+        <Button label="primary" operazione={() => navigate("/servizi/medico-base")}>
+          Cambia Medico
+        </Button>
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-col items-start space-y-4">
+      <p>Non hai ancora selezionato un medico di base.</p>
+      <Button label="primary" operazione={() => navigate("/servizi/medico-base")}>
+        Scegli Medico
+      </Button>
+    </div>
+  )}
+</div>
+
 
       </div>
     </main>

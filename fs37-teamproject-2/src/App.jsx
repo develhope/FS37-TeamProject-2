@@ -23,7 +23,6 @@ import LayoutServizi from "./Pages/Servizi/LayoutServizi";
 import Documentazione from "./Pages/Servizi/Documentazione";
 import ASLPiuVicina from "./Pages/Servizi/ASLPiuVicina";
 import MedicoBase from "./Pages/Servizi/MedicoBase";
-import NecessitaSpeciali from "./Pages/Servizi/NecessitaSpeciali";
 import Prenotazioni from "./Pages/Servizi/Prenotazioni";
 import Contatti from "./Pages/Contatti";
 
@@ -90,6 +89,7 @@ function App() {
             >
               <Route path="asl-piu-vicina" element={<ASLPiuVicina />} />
               <Route path="medico-base" element={<MedicoBase />} />
+              
               <Route
                 path="necessita-speciali"
                 element={<NecessitaSpeciali />}
