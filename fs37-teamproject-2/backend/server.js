@@ -1,17 +1,25 @@
 import express from "express";
 import cors from "cors";
-import { registrazione, getAll } from "./controllers/authControllers";
+import { registrazione, getAll } from "./controllers/authControllers.js";
+import dotenv from "dotenv";
+import pgPromise from "pg-promise";
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/", getAll)
+const db = pgPromise({})(process.env.URL);
 
-app.post("/registrazione", registrazione) 
+console.log(db);
+
+app.get("/", getAll);
+
+app.post("/registrazione", registrazione);
 
 app.listen(PORT, () => {
-    console.log(`Sever attivo su http://localhost:${PORT}`);
-})
+  console.log(`Server attivo su http://localhost:${PORT}`);
+});
