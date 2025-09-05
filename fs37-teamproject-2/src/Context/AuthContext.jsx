@@ -53,29 +53,52 @@ function AuthProvider({ children }) {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
-  function registrazione(userData) {
+  async function registrazione(userData) {
     const userExist = users.find((x) => x.email === userData.email);
+
+    try {
+      const result = await fetch("http://localhost:3000/registrazione", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ utente: userData }),
+      });
+
+      const data = result.json();
+
+      setMessage(data.message);
+      if (result.ok) {
+        setTimeout(() => {
+          setMessage(``);
+          navigate("/login");
+        }, 3000);
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message);
+    }
+
     if (!userExist) {
-     const secret = new OTPAuth.Secret();           // <-- genera random
-     const newUser = { ...userData, totpSecretB32: secret.base32 };
+      const secret = new OTPAuth.Secret(); // <-- genera random
+      const newUser = { ...userData, totpSecretB32: secret.base32 };
       setUsers([...users, newUser]);
-      setMessage(`Registrazione avvenuta con successo`);
-      setTimeout(() => {
-        setMessage(``);
-        navigate("/login");
-      }, 3000);
     } else {
       setMessage(`Email gia' registrata`);
     }
   }
 
-  useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
-  }, [users]);
-
   return (
     <AuthContext.Provider
-      value={{ user, setUser, login, logout, registrazione, message }}
+      value={{
+        user,
+        setUser,
+        login,
+        logout,
+        registrazione,
+        message,
+        setMessage,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -2,8 +2,6 @@ import express from "express";
 import cors from "cors";
 import { registrazione, getAll } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
-import pgPromise from "pg-promise";
-import db from "./db.js";
 
 dotenv.config();
 

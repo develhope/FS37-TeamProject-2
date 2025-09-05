@@ -5,7 +5,7 @@ import { Button } from "../Components/Button";
 import { Input } from "../Components/Input";
 
 function Registrazione() {
-  const { registrazione } = useAuth();
+  const { registrazione, message, setMessage } = useAuth();
   const navigate = useNavigate();
 
   const [user, setUser] = useState(() => {
@@ -19,7 +19,6 @@ function Registrazione() {
   });
 
   const [step, setStep] = useState(1);
-  const [message, setMessage] = useState("");
   const [emailExists, setEmailExists] = useState(false);
 
   function handleChange(e) {
@@ -36,7 +35,8 @@ function Registrazione() {
     localStorage.setItem("step", JSON.stringify(user));
   }, [user]);
 
-  const isEmailValid = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || "");
+  const isEmailValid = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || "");
 
   const isStep1Complete =
     user.email &&
@@ -48,15 +48,20 @@ function Registrazione() {
     !emailExists;
 
   const isStep2Complete =
-    user.codiceFiscale &&
-    user.dataNascita &&
-    user.luogoNascita &&
+    user.codice_fiscale &&
+    user.data_di_nascita &&
+    user.luogo_di_nascita &&
     user.indirizzo &&
-    user.cap;
+    user.cap &&
+    user.numero_civico &&
+    user.regione &&
+    user.citta &&
+    user.sesso &&
+    user.nazionalita;
 
   const handleNextStep = () => {
     const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const emailAlreadyUsed = existingUsers.some(u => u.email === user.email);
+    const emailAlreadyUsed = existingUsers.some((u) => u.email === user.email);
 
     if (emailAlreadyUsed) {
       setEmailExists(true);
@@ -73,23 +78,13 @@ function Registrazione() {
     setStep(2);
   };
 
-  const handleRegistrazione = (e) => {
+  const handleRegistrazione = async (e) => {
     e.preventDefault();
 
     if (!isStep2Complete) return;
 
-    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const updatedUsers = [...existingUsers, user];
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-    setMessage("La registrazione è andata a buon fine");
-
     registrazione(user);
-
-    setTimeout(() => {
-      setMessage("");
-      navigate("/login");
-    }, 3000);
+    setMessage(message);
 
     localStorage.removeItem("step");
   };
@@ -108,7 +103,10 @@ function Registrazione() {
         {/* STEP 1 */}
         <div className={step === 1 ? "" : "hidden"}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Email:
             </label>
             <Input
@@ -126,7 +124,10 @@ function Registrazione() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Password:
             </label>
             <Input
@@ -141,7 +142,10 @@ function Registrazione() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="nome" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="nome"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Nome:
             </label>
             <Input
@@ -156,7 +160,10 @@ function Registrazione() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="cognome" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="cognome"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Cognome:
             </label>
             <Input
@@ -171,7 +178,10 @@ function Registrazione() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="telefono" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="telefono"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Telefono:
             </label>
             <Input
@@ -186,7 +196,9 @@ function Registrazione() {
           </div>
 
           {message && (
-            <p className="text-gray-500 font-bold text-center mt-2">{message}</p>
+            <p className="text-gray-500 font-bold text-center mt-2">
+              {message}
+            </p>
           )}
 
           <div className="mt-6 flex justify-center">
@@ -204,51 +216,63 @@ function Registrazione() {
         {/* STEP 2 */}
         <div className={step === 2 ? "" : "hidden"}>
           <div className="mb-4">
-            <label htmlFor="codiceFiscale" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="codiceFiscale"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Codice Fiscale:
             </label>
             <Input
               id="codiceFiscale"
-              name="codiceFiscale"
+              name="codice_fiscale"
               type="text"
               placeholder="Codice Fiscale"
-              value={user.codiceFiscale || ""}
+              value={user.codice_fiscale || ""}
               onChange={handleChange}
               mode="defaultInput"
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="dataNascita" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="dataNascita"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Data di nascita:
             </label>
             <Input
               id="dataNascita"
-              name="dataNascita"
+              name="data_di_nascita"
               type="date"
-              value={user.dataNascita || ""}
+              value={user.data_di_nascita || ""}
               onChange={handleChange}
               mode="defaultInput"
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="luogoNascita" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="luogoNascita"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Luogo di nascita:
             </label>
             <Input
               id="luogoNascita"
-              name="luogoNascita"
+              name="luogo_di_nascita"
               type="text"
               placeholder="Luogo di nascita"
-              value={user.luogoNascita || ""}
+              value={user.luogo_di_nascita || ""}
               onChange={handleChange}
               mode="defaultInput"
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="indirizzo" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="indirizzo"
+              className="block text-gray-700 font-medium mb-1"
+            >
               Indirizzo:
             </label>
             <Input
@@ -263,7 +287,10 @@ function Registrazione() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="cap" className="block text-gray-700 font-medium mb-1">
+            <label
+              htmlFor="cap"
+              className="block text-gray-700 font-medium mb-1"
+            >
               CAP:
             </label>
             <Input
@@ -277,6 +304,90 @@ function Registrazione() {
             />
           </div>
 
+          <div className="mb-4">
+            <label
+              htmlFor="numero_civico"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Numero Civico:
+            </label>
+            <Input
+              id="numero_civico"
+              name="numero_civico"
+              type="text"
+              placeholder="Numero Civico"
+              value={user.numero_civico || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="regione"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Regione:
+            </label>
+            <Input
+              id="regione"
+              name="regione"
+              type="text"
+              placeholder="Regione"
+              value={user.regione || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="citta"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Citta:
+            </label>
+            <Input
+              id="citta"
+              name="citta"
+              type="text"
+              placeholder="Citta'"
+              value={user.citta || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="nazionalita"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Nazionalita':
+            </label>
+            <Input
+              id="nazionalita"
+              name="nazionalita"
+              type="text"
+              placeholder="Nazionalita'"
+              value={user.nazionalita || ""}
+              onChange={handleChange}
+              mode="defaultInput"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="cap"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Sesso:
+            </label>
+            <select onChange={handleChange} name="sesso">
+              <option value={"M"} defaultValue={"M"}>
+                Maschio
+              </option>
+              <option value={"F"}>Femmina</option>
+            </select>
+          </div>
+
           <div className="flex justify-between items-center gap-2 mt-6">
             <Button
               label="secondary"
@@ -285,17 +396,15 @@ function Registrazione() {
             >
               Indietro
             </Button>
-            <Button
-              label="primary"
-              type="submit"
-              disabled={!isStep2Complete}
-            >
+            <Button label="primary" type="submit" disabled={!isStep2Complete}>
               Registrati
             </Button>
           </div>
 
           {message && (
-            <p className="text-gray-500 font-bold text-center mt-2">{message}</p>
+            <p className="text-gray-500 font-bold text-center mt-2">
+              {message}
+            </p>
           )}
         </div>
 
@@ -307,7 +416,10 @@ function Registrazione() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Hai già un account?{" "}
-          <Link to="/login" className="text-[#006450] font-medium hover:underline">
+          <Link
+            to="/login"
+            className="text-[#006450] font-medium hover:underline"
+          >
             Effettua il login
           </Link>
         </p>
