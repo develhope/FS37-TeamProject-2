@@ -13,34 +13,34 @@ function AuthProvider({ children }) {
 
   const navigate = useNavigate();
 
-  // const login = (email, password) => {
-  //   const idx = users.findIndex(
-  //     (x) => x.email === email && x.password === password
-  //   );
-  //   if (idx > -1) {
-  //     const found = { ...users[idx] };
+  const login = async (email, password) => {
+   try {
+     const result = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+      const data = await result.json();
+      if(result.ok){
+        setMessage(data.message);
+        setUser(data.user);
+        
+        const secret = new OTPAuth.Secret(); // <-- genera random
+        localStorage.setItem("topSecretB32", secret.base32)
+        setTimeout(()=>{
+           navigate("/conferma-otp?next=/dashboard");
+        }, 2000)
+      }else{
+        setMessage(data.message);
+      }
+   } catch (error) {
+    console.error(error);
+   }
 
-  //     // Se l'utente non ha ancora un segreto TOTP, creane uno ora (DEV)
-  //     if (!found.totpSecretB32) {
-  //       const secret = new OTPAuth.Secret(); // <-- genera random
-  //       found.totpSecretB32 = secret.base32;
-  //       const updated = [...users];
-  //       updated[idx] = found;
-  //       setUsers(updated);
-  //     }
-
-  //     setUser(found);
-  //     setMessage(``);
-
-  //     // Salviamo anche un fallback DEV in localStorage (la pagina OTP lo userà se serve)
-  //     localStorage.setItem("mfa_secret", found.totpSecretB32);
-
-  //     // Vai alla pagina OTP, e dopo la verifica rientri dove vuoi tu
-  //     navigate("/conferma-otp?next=/dashboard");
-  //   } else {
-  //     setMessage(`Credenziali errate`);
-  //   }
-  // };
+    
+  };
 
   // const logout = () => {
   //   localStorage.removeItem("otp_verified_at");
@@ -66,8 +66,7 @@ function AuthProvider({ children }) {
 
       setMessage(data.message);
       if (result.ok) {
-        const secret = new OTPAuth.Secret(); // <-- genera random
-        localStorage.setItem("topSecretB32", JSON.stringify(secret.base32))
+        
         setTimeout(() => {
           setMessage(``);
           navigate("/login");
@@ -87,6 +86,7 @@ function AuthProvider({ children }) {
         registrazione,
         message,
         setMessage,
+        login,
       }}
     >
       {children}

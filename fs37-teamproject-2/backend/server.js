@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { registrazione, getAll } from "./controllers/authControllers.js";
+import { registrazione, getAll, login } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -14,6 +14,7 @@ app.use(cors());
 app.get("/", getAll);
 
 app.post("/registrazione", registrazione);
+app.post("/login", login);
 
 app.listen(PORT, () => {
   console.log(`Server attivo su http://localhost:${PORT}`);

@@ -9,28 +9,14 @@ import { Input } from "../Components/Input";
 
 function Login() {
   const navigate = useNavigate();
-  const { login, user } = useAuth();
+  const { login, message } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState("");
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-
-    const foundUser = storedUsers.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (foundUser) {
-      login(email, password);
-      setError("");
-    } else {
-      setError("Credenziali errate o inesistenti");
-      setTimeout(() => setError(""), 2000); 
-    }
+    login(email, password);
   };
 
   return (
@@ -68,8 +54,8 @@ function Login() {
               value={password}
             />
 
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
+            {message && (
+              <p className="text-red-500 text-sm text-center">{message}</p>
             )}
 
             <div className="flex justify-between items-center mt-2 mb-6">

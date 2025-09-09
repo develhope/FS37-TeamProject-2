@@ -78,4 +78,20 @@ const getAll = async (req, res) => {
   }
 };
 
-export { registrazione, getAll };
+const login = async (req,res) =>{
+  try {
+    const {email, password} = req.body;
+    const userExist = await db.oneOrNone(`
+      SELECT * FROM utenti WHERE email = $1 AND password = $2
+      `, [email, password]);
+      if(userExist){
+        res.status(200).json({message: "Login effettuato con successo", user: userExist})
+      } else {
+        res.status(404).json({message: "Credenziali errate"})
+      }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+export { registrazione, getAll, login };

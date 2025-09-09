@@ -21,18 +21,16 @@ function msToNextTick() {
 }
 
 export default function ConfermaOTP() {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const next = searchParams.get("next") || "/"; // pagina di destinazione post-verifica
 
   // Recupero segreto salvato per l'utente (registrazione/login lo inseriscono nel record utente o in localStorage)
-  const secretB32 =
-    (user && user.totpSecretB32) || localStorage.getItem("mfa_secret") || "";
+   
   const [totp, setTotp] = useState(() =>
-    secretB32
+     localStorage.getItem("topSecretB32") || localStorage.getItem("mfa_secret") || ""
       ? new OTPAuth.TOTP({
-          secret: OTPAuth.Secret.fromBase32(secretB32),
+          secret: OTPAuth.Secret.fromBase32( localStorage.getItem("topSecretB32")),
           digits: 6,
           period: 60,
           algorithm: "SHA1",
