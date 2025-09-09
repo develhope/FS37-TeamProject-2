@@ -6,7 +6,6 @@ import { Input } from "../Components/Input";
 
 function Registrazione() {
   const { registrazione, message, setMessage } = useAuth();
-  const navigate = useNavigate();
 
   const [user, setUser] = useState(() => {
     try {
@@ -19,16 +18,10 @@ function Registrazione() {
   });
 
   const [step, setStep] = useState(1);
-  const [emailExists, setEmailExists] = useState(false);
-
+  
   function handleChange(e) {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "email") {
-      setEmailExists(false);
-      setMessage("");
-    }
   }
 
   useEffect(() => {
@@ -44,8 +37,8 @@ function Registrazione() {
     user.password &&
     user.nome &&
     user.cognome &&
-    user.telefono &&
-    !emailExists;
+    user.telefono
+    
 
   const isStep2Complete =
     user.codice_fiscale &&
@@ -60,20 +53,6 @@ function Registrazione() {
     user.nazionalita;
 
   const handleNextStep = () => {
-    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const emailAlreadyUsed = existingUsers.some((u) => u.email === user.email);
-
-    if (emailAlreadyUsed) {
-      setEmailExists(true);
-      setMessage("L'email è già stata registrata");
-
-      setTimeout(() => {
-        setMessage("");
-        setEmailExists(false);
-      }, 2000);
-
-      return;
-    }
 
     setStep(2);
   };
