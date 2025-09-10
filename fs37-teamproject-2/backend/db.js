@@ -54,6 +54,22 @@ const createTables = async () => {
     `);
 
     await db.none(`
+  CREATE TABLE IF NOT EXISTS prenotazioni (
+    id SERIAL PRIMARY KEY,
+    id_utente INTEGER NOT NULL,
+    id_servizio INTEGER NOT NULL,
+    data_prenotazione TIMESTAMP DEFAULT NOW(),
+    note TEXT,
+
+    FOREIGN KEY (id_utente) REFERENCES utenti(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_servizio) REFERENCES servizi(id) ON DELETE CASCADE
+  )
+`);
+
+// Questa tabella serve per sapere quali servizi ha prenotato ogni utente e permettere di aggiungere, modificare o rimuovere prenotazioni.
+//!!!!!!!! ON DELETE CASCADE !!!!!!!!: se cancello l'utente tutte le sue prenotazioni vengono autamticamente eliminate. Se elimino un servizio, tutte le prenotazioni ad esso connesse vengono automaticamente eliminate. VERSIONE DI ELENA
+
+    await db.none(`
       CREATE TABLE IF NOT EXISTS centro_servizi (
         id_centro INTEGER NOT NULL,
         id_servizio INTEGER NOT NULL,
@@ -63,6 +79,8 @@ const createTables = async () => {
         FOREIGN KEY (id_servizio) REFERENCES servizi(id)
       )
     `);
+
+    /////////////////////////////
 
     await db.none(`
       CREATE TABLE IF NOT EXISTS medici (

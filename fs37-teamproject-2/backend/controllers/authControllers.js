@@ -94,4 +94,91 @@ const login = async (req,res) =>{
   }
 }
 
-export { registrazione, getAll, login };
+const modificaDati = async(req, res) => {
+  try {
+    const {id} = req.params;
+    const {utente} = req.body;
+    await db.none(`UPDATE utenti SET nome=$1, cognome=$2, email=$3, telefono=$4 WHERE id=$5`,
+      [utente.nome, utente.cognome, utente.email, utente.telefono, id]
+    )
+    res.status(200).json({message: "Dati profilo aggiornati correttamente"})
+  } catch (error) {
+    res.json({message: error.message})
+  }
+}
+
+const getPrenotazioni = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const servizi = await db.any(
+      `SELECT s.id, s.nome, s.tipologia, s.detraibilita, p.note
+       FROM prenotazioni p
+       JOIN servizi s ON p.id_servizio = s.id
+       WHERE p.id_utente = $1`,
+      [id]
+    );
+
+    res.json(servizi);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Errore nel recupero delle prenotazioni." });
+  }
+};
+
+
+const aggiungiPrenotazione = async (req, res) => {
+  const { id } = req.params; // id utente
+  const { id_servizio, note } = req.body;
+
+  try {
+    await db.none(
+      `INSERT INTO prenotazioni (id_utente, id_servizio, note)
+       VALUES ($1, $2, $3)`,
+      [id, id_servizio, note || null]
+    );
+
+    res.json({ message: "Prenotazione aggiunta con successo." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Errore nell'aggiunta della prenotazione." });
+  }
+};
+
+const modificaPrenotazione = async (req, res) => {
+  const { id, idServizio } = req.params;
+  const { note } = req.body;
+
+  try {
+    await db.none(
+      `UPDATE prenotazioni
+       SET note = $1
+       WHERE id_utente = $2 AND id_servizio = $3`,
+      [note, id, idServizio]
+    );
+
+    res.json({ message: "Prenotazione aggiornata." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Errore nella modifica della prenotazione." });
+  }
+};
+
+const eliminaPrenotazione = async (req, res) => {
+  const { id, idServizio } = req.params;
+
+  try {
+    await db.none(
+      `DELETE FROM prenotazioni
+       WHERE id_utente = $1 AND id_servizio = $2`,
+      [id, idServizio]
+    );
+
+    res.json({ message: "Prenotazione eliminata." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Errore nella cancellazione della prenotazione." });
+  }
+};
+
+export { registrazione, getAll, login, modificaDati, aggiungiPrenotazione, modificaPrenotazione, eliminaPrenotazione, getPrenotazioni };
