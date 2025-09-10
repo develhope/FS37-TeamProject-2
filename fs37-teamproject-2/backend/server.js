@@ -7,6 +7,11 @@ import {
   prenotazioni,
   updateMedico,
   getMedici,
+  modificaDati,
+  modificaPrenotazione,
+  aggiungiPrenotazione,
+  eliminaPrenotazione,
+  getPrenotazioni,
 } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
@@ -24,6 +29,11 @@ app.get("/medici", getMedici);
 
 app.post("/registrazione", registrazione);
 app.post("/login", login);
+app.post("/:id/modifica", modificaDati);
+app.get("/utenti/:id/servizi", getPrenotazioni);
+app.post("/utenti/:id/servizi", aggiungiPrenotazione);
+app.put("/utenti/:id/servizi/:idServizio", modificaPrenotazione);
+app.delete("/utenti/:id/servizi/:idServizio", eliminaPrenotazione);
 
 app.put("/utenti/:id/medico", updateMedico); // Aggiungi la rotta PUT per l'aggiornamento del medico
 
