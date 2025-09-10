@@ -12,6 +12,7 @@ import {
   aggiungiPrenotazione,
   eliminaPrenotazione,
   getPrenotazioni,
+  getCentri,
 } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
@@ -26,6 +27,7 @@ app.use(cors());
 app.get("/", getAll);
 app.get("/prenotazioni", prenotazioni);
 app.get("/medici", getMedici);
+app.get("/centri", getCentri);
 
 app.post("/registrazione", registrazione);
 app.post("/login", login);
@@ -35,8 +37,7 @@ app.post("/utenti/:id/servizi", aggiungiPrenotazione);
 app.put("/utenti/:id/servizi/:idServizio", modificaPrenotazione);
 app.delete("/utenti/:id/servizi/:idServizio", eliminaPrenotazione);
 
-app.put("/utenti/:id/medico", updateMedico); // Aggiungi la rotta PUT per l'aggiornamento del medico
-
+app.put("/utenti/:id/medico", updateMedico);
 app.listen(PORT, () => {
   console.log(`Server attivo su http://localhost:${PORT}`);
 });

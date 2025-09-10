@@ -241,6 +241,16 @@ const eliminaPrenotazione = async (req, res) => {
   }
 };
 
+const getCentri = async (req, res) => {
+  try {
+    const centri = await db.many("SELECT * FROM centri");
+    res.json(centri);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Errore nel recupero dei centri" });
+  }
+};
+
 export {
   registrazione,
   getAll,
@@ -253,4 +263,5 @@ export {
   prenotazioni,
   getMedici,
   updateMedico,
+  getCentri,
 };
