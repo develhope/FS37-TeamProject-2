@@ -42,10 +42,10 @@ function AuthProvider({ children }) {
     
   };
 
-  // const logout = () => {
-  //   localStorage.removeItem("otp_verified_at");
-  //   setUser(null);
-  // };
+  const logout = () => {
+    localStorage.removeItem("otp_verified_at");
+    setUser(null);
+  };
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
@@ -87,6 +87,7 @@ function AuthProvider({ children }) {
         message,
         setMessage,
         login,
+        logout,
       }}
     >
       {children}

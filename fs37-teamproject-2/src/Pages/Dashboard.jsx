@@ -5,35 +5,45 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const { user, setUser, logout } = useAuth(); 
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState(user);
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const currentUser = users.find(u => u.email === user.email);
 
-  if (currentUser) {
-    currentUser.serviziPrenotati = currentUser.serviziPrenotati || [];
-    currentUser.medico = currentUser.medico || null;
-  }
+//   useEffect(() => {
+//     const users = JSON.parse(localStorage.getItem("users")) || [];
+//     const currentUser = users.find(u => u.email === user.email);
+//     console.log(profile);
 
-  setProfile(currentUser || {});
-}, [user]);
+//   if (currentUser) {
+//     currentUser.serviziPrenotati = currentUser.serviziPrenotati || [];
+//     currentUser.medico = currentUser.medico || null;
+//   }
+
+//   setProfile(user || {});
+// }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const updatedUsers = users.map(u =>
-      u.email === user.email ? profile : u
-    );
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUser(profile);
-    setEditing(false);
+  const handleSave = async () => {
+    try {
+      const result = await fetch(`http://localhost:3000/${user.id}/modifica`,
+        {method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ utente: profile })}
+      )
+      const data = await result.json();
+      if(result.ok) {
+        console.log(data.message);
+      setEditing(false)}
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   const handleLogout = () => {
@@ -42,19 +52,19 @@ function Dashboard() {
   };
 
   // elimina il servizio prenotato dall'utente corrente
-const handleRemoveServizio = (idServizio) => {
-  const utenti = JSON.parse(localStorage.getItem("users")) || [];
-  const idx = utenti.findIndex(u => u.email === user.email);
-  if (idx === -1) return;
+// const handleRemoveServizio = (idServizio) => {
+//   const utenti = JSON.parse(localStorage.getItem("users")) || [];
+//   const idx = utenti.findIndex(u => u.email === user.email);
+//   if (idx === -1) return;
 
-  const curr = utenti[idx];
-  const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idServizio);
-  curr.serviziPrenotati = nuoviServizi;
+//   const curr = utenti[idx];
+//   const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idServizio);
+//   curr.serviziPrenotati = nuoviServizi;
 
-  localStorage.setItem("users", JSON.stringify(utenti));
-  setUser(curr);          // aggiorna il context Auth
-  setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
-};
+//   localStorage.setItem("users", JSON.stringify(utenti));
+//   setUser(curr);          // aggiorna il context Auth
+//   setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
+// };
 
 
   return (
