@@ -23,18 +23,13 @@ const registrazione = async (req, res) => {
       } = utente;
 
       const userExist = await db.oneOrNone(
-        `
-    select * from utenti
-    where email=$1
-    `,
+        `select * from utenti where email=$1`,
         [email]
       );
       if (!userExist) {
         await db.none(
           `INSERT INTO utenti (nome, cognome, codice_fiscale, email, password, data_di_nascita, luogo_di_nascita, indirizzo, cap, numero_civico, regione, citta, sesso, telefono, nazionalita)
-             VALUES
-             ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-             `,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
           [
             nome,
             cognome,
@@ -68,9 +63,7 @@ const registrazione = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const utenti = await db.many(`
-        select * from utenti
-        `);
+    const utenti = await db.many(`select * from utenti`);
     res.json(utenti);
   } catch (error) {
     console.error(error);
@@ -82,9 +75,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const userExist = await db.oneOrNone(
-      `
-      SELECT * FROM utenti WHERE email = $1 AND password = $2
-      `,
+      `SELECT * FROM utenti WHERE email = $1 AND password = $2`,
       [email, password]
     );
     if (userExist) {
@@ -155,18 +146,19 @@ const updateMedico = async (req, res) => {
   }
 };
 
-const modificaDati = async(req, res) => {
+const modificaDati = async (req, res) => {
   try {
-    const {id} = req.params;
-    const {utente} = req.body;
-    await db.none(`UPDATE utenti SET nome=$1, cognome=$2, email=$3, telefono=$4 WHERE id=$5`,
+    const { id } = req.params;
+    const { utente } = req.body;
+    await db.none(
+      `UPDATE utenti SET nome=$1, cognome=$2, email=$3, telefono=$4 WHERE id=$5`,
       [utente.nome, utente.cognome, utente.email, utente.telefono, id]
-    )
-    res.status(200).json({message: "Dati profilo aggiornati correttamente"})
+    );
+    res.status(200).json({ message: "Dati profilo aggiornati correttamente" });
   } catch (error) {
-    res.json({message: error.message})
+    res.json({ message: error.message });
   }
-}
+};
 
 const getPrenotazioni = async (req, res) => {
   const { id } = req.params;
@@ -183,10 +175,11 @@ const getPrenotazioni = async (req, res) => {
     res.json(servizi);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Errore nel recupero delle prenotazioni." });
+    res
+      .status(500)
+      .json({ message: "Errore nel recupero delle prenotazioni." });
   }
 };
-
 
 const aggiungiPrenotazione = async (req, res) => {
   const { id } = req.params; // id utente
@@ -202,7 +195,9 @@ const aggiungiPrenotazione = async (req, res) => {
     res.json({ message: "Prenotazione aggiunta con successo." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Errore nell'aggiunta della prenotazione." });
+    res
+      .status(500)
+      .json({ message: "Errore nell'aggiunta della prenotazione." });
   }
 };
 
@@ -221,7 +216,9 @@ const modificaPrenotazione = async (req, res) => {
     res.json({ message: "Prenotazione aggiornata." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Errore nella modifica della prenotazione." });
+    res
+      .status(500)
+      .json({ message: "Errore nella modifica della prenotazione." });
   }
 };
 
@@ -238,9 +235,22 @@ const eliminaPrenotazione = async (req, res) => {
     res.json({ message: "Prenotazione eliminata." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Errore nella cancellazione della prenotazione." });
+    res
+      .status(500)
+      .json({ message: "Errore nella cancellazione della prenotazione." });
   }
 };
 
-export { registrazione, getAll, login, modificaDati, aggiungiPrenotazione, modificaPrenotazione, eliminaPrenotazione, getPrenotazioni };
-export { registrazione, getAll, login, prenotazioni, getMedici, updateMedico };
+export {
+  registrazione,
+  getAll,
+  login,
+  modificaDati,
+  aggiungiPrenotazione,
+  modificaPrenotazione,
+  eliminaPrenotazione,
+  getPrenotazioni,
+  prenotazioni,
+  getMedici,
+  updateMedico,
+};
