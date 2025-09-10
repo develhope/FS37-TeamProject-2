@@ -92,6 +92,17 @@ const createTables = async () => {
         FOREIGN KEY (id_medico) REFERENCES medici(id)
       )
     `);
+    await db.none(`
+      CREATE TABLE IF NOT EXISTS prenotazioni (
+  id SERIAL PRIMARY KEY,
+  id_medico INTEGER REFERENCES medici(id),
+  id_servizio INTEGER REFERENCES servizi(id),
+  data_prenotazione TIMESTAMP,
+  nome_cliente VARCHAR(100),
+  telefono_cliente VARCHAR(15)
+)
+
+    `);
   } catch (error) {
     console.error(error);
   }
