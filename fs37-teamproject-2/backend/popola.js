@@ -4,13 +4,13 @@ const seedData = async () => {
   try {
     await db.tx(async (t) => {
       // 1. Elimina i dati esistenti (pulizia del DB)
-      await t.none('DELETE FROM prenotazioni');
-      await t.none('DELETE FROM centro_medici');
-      await t.none('DELETE FROM centro_servizi');
-      await t.none('DELETE FROM medici');
-      await t.none('DELETE FROM centri');
-      await t.none('DELETE FROM servizi');
-      await t.none('DELETE FROM utenti');
+      await t.none("DELETE FROM prenotazioni");
+      await t.none("DELETE FROM centro_medici");
+      await t.none("DELETE FROM centro_servizi");
+      await t.none("DELETE FROM medici");
+      await t.none("DELETE FROM centri");
+      await t.none("DELETE FROM servizi");
+      await t.none("DELETE FROM utenti");
 
       // 2. Popola medici (devono essere inseriti prima di centro_medici e prenotazioni)
       await t.none(`
@@ -55,11 +55,10 @@ const seedData = async () => {
 
       // 7. Popola prenotazioni (ora che i medici e i servizi sono popolati)
       await t.none(`
-        INSERT INTO prenotazioni (id_medico, id_servizio, data_prenotazione, nome_cliente, telefono_cliente)
-        VALUES
-          (1, 1, '2025-10-10 10:00:00', 'Mario Rossi', '3331234567'),
-          (2, 2, '2025-10-11 14:30:00', 'Giulia Neri', '3349876543'),
-          (1, 1, '2025-10-12 11:00:00', 'Luca Bianchi', '3359876543');
+        INSERT INTO prenotazioni (id_medico, id_servizio, data_prenotazione, id_cliente)
+          (1, 1, '2025-10-10 10:00:00',9),
+          (2, 2, '2025-10-11 14:30:00',9),
+          (1, 1, '2025-10-12 11:00:00',9);
       `);
 
       console.log("Popolamento completato!");

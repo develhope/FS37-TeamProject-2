@@ -4,7 +4,6 @@ import {
   registrazione,
   getAll,
   login,
-  prenotazioni,
   updateMedico,
   getMedici,
   modificaDati,
@@ -25,14 +24,13 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", getAll);
-app.get("/prenotazioni", prenotazioni);
 app.get("/medici", getMedici);
 app.get("/centri", getCentri);
+app.get("/utenti/:id/prenotazioni", getPrenotazioni);
 
 app.post("/registrazione", registrazione);
 app.post("/login", login);
 app.post("/:id/modifica", modificaDati);
-app.get("/utenti/:id/servizi", getPrenotazioni);
 app.post("/utenti/:id/servizi", aggiungiPrenotazione);
 app.put("/utenti/:id/servizi/:idServizio", modificaPrenotazione);
 app.delete("/utenti/:id/servizi/:idServizio", eliminaPrenotazione);

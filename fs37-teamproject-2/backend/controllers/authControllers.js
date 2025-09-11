@@ -90,24 +90,19 @@ const login = async (req, res) => {
   }
 };
 
-const prenotazioni = async (req, res) => {
-  try {
-    const result = await db.many(`
-      SELECT p.id, s.nome AS servizio, m.nome AS medico, p.data_prenotazione, p.nome_cliente, p.telefono_cliente
-      FROM prenotazioni p
-      JOIN servizi s ON p.id_servizio = s.id
-      JOIN medici m ON p.id_medico = m.id
-    `);
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
 const getMedici = async (req, res) => {
   try {
     const medici = await db.many("SELECT * FROM medici");
+    res.json(medici); // Restituisci i medici come JSON
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Errore nel recupero dei medici" });
+  }
+};
+const getMedico = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medici = await db.many(`SELECT * FROM medici where id=$1`, [id]);
     res.json(medici); // Restituisci i medici come JSON
   } catch (error) {
     console.error(error);
@@ -164,15 +159,21 @@ const getPrenotazioni = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const servizi = await db.any(
-      `SELECT s.id, s.nome, s.tipologia, s.detraibilita, p.note
-       FROM prenotazioni p
-       JOIN servizi s ON p.id_servizio = s.id
-       WHERE p.id_utente = $1`,
+    const prenotazioni = await db.any(
+      `select
+utenti.nome as nome_cliente,
+utenti.cognome as cognome_cliente,
+servizi.nome as nome_servizio,
+servizi.tipologia as tipologia_servizio,
+prenotazioni.data_prenotazione as data_prenotazione
+from prenotazioni
+join utenti on prenotazioni.id_cliente = utenti.id
+join servizi on prenotazioni.id_servizio = servizi.id
+where id_cliente=$1`,
       [id]
     );
 
-    res.json(servizi);
+    res.json(prenotazioni);
   } catch (err) {
     console.error(err);
     res
@@ -260,7 +261,6 @@ export {
   modificaPrenotazione,
   eliminaPrenotazione,
   getPrenotazioni,
-  prenotazioni,
   getMedici,
   updateMedico,
   getCentri,
