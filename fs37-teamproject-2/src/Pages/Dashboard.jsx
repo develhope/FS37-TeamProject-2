@@ -4,8 +4,9 @@ import { Button } from "../Components/Button";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-  const { user, setUser, logout } = useAuth();
+  const { user, setUser, logout, elenco } = useAuth();
   const [profile, setProfile] = useState(user);
+  const [medico, setMedico] = useState({});
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
@@ -51,21 +52,30 @@ function Dashboard() {
     navigate("/login");
   };
 
-  // elimina il servizio prenotato dall'utente corrente
-  // const handleRemoveServizio = (idServizio) => {
+  useEffect(() => {
+    const fetchMedico = async () => {
+      const result = await fetch(`http://localhost:3000/${user.medico}/medico`);
+      const data = await result.json();
+      setMedico(data);
+    };
+    fetchMedico();
+  }, []);
+
+  // elimina il prenotazione prenotato dall'utente corrente
+  // const handleRemoveprenotazione = (idprenotazione) => {
   //   const utenti = JSON.parse(localStorage.getItem("users")) || [];
   //   const idx = utenti.findIndex(u => u.email === user.email);
   //   if (idx === -1) return;
 
   //   const curr = utenti[idx];
-  //   const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idServizio);
+  //   const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idprenotazione);
   //   curr.serviziPrenotati = nuoviServizi;
 
   //   localStorage.setItem("users", JSON.stringify(utenti));
   //   setUser(curr);          // aggiorna il context Auth
   //   setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
   // };
-
+  console.log(user.medico);
   return (
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="flex justify-between items-center mb-6">
@@ -151,46 +161,29 @@ function Dashboard() {
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Servizi Prenotati</h2>
 
-          {profile.serviziPrenotati && profile.serviziPrenotati.length > 0 ? (
+          {elenco.length > 0 ? (
             <div className="space-y-4">
-              {profile.serviziPrenotati.map((servizio) => (
+              {elenco.map((prenotazione, i) => (
                 <div
-                  key={servizio.id}
+                  key={i}
                   className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
                 >
-                  <div className="flex-shrink-0">
-                    <img
-                      src={servizio.icona}
-                      alt={`Icona ${servizio.nome}`}
-                      className="w-16 h-16 object-contain"
-                    />
-                  </div>
-
                   <div className="flex-grow space-y-1">
                     <p>
-                      <strong>Nome:</strong> {servizio.nome}
+                      <strong>Nome:</strong> {prenotazione.nome_servizio}
                     </p>
                     <p>
-                      <strong>Tipologia:</strong> {servizio.tipologia}
-                    </p>
-                    <p>
-                      <strong>Detraibile:</strong>{" "}
-                      {servizio.detraibilita ? "Sì" : "No"}
+                      <strong>Tipologia:</strong>{" "}
+                      {prenotazione.tipologia_servizio}
                     </p>
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <Button
-                      label="secondary"
+                      label="primary"
                       operazione={() => navigate("/servizi/prenotazioni")}
                     >
-                      Modifica
-                    </Button>
-                    <Button
-                      label="primary"
-                      operazione={() => handleRemoveServizio(servizio.id)}
-                    >
-                      Elimina
+                      Vedi
                     </Button>
                   </div>
                 </div>
@@ -198,7 +191,7 @@ function Dashboard() {
             </div>
           ) : (
             <div className="flex flex-col items-start space-y-4">
-              <p>Non hai ancora prenotato alcun servizio.</p>
+              <p>Non hai ancora prenotato alcun prenotazione.</p>
               <Button
                 label="primary"
                 operazione={() => navigate("/servizi/prenotazioni")}
@@ -228,38 +221,36 @@ function Dashboard() {
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Il mio medico di base</h2>
 
-          {profile.medico ? (
+          {medico ? (
             <div className="flex space-x-4">
               <div className="flex-shrink-0">
                 <img
-                  src={profile.medico.foto || "https://via.placeholder.com/100"}
-                  alt={`Foto di ${profile.medico.nome}`}
+                  src={medico.foto || "https://via.placeholder.com/100"}
+                  alt={`Foto di ${medico.nome}`}
                   className="w-24 h-24 rounded-full object-cover border"
                 />
               </div>
 
               <div className="flex-grow space-y-1">
                 <p>
-                  <strong>Nome:</strong> {profile.medico.nome}{" "}
-                  {profile.medico.cognome}
+                  <strong>Nome:</strong> {medico.nome} {medico.cognome}
                 </p>
                 <p>
-                  <strong>Email:</strong> {profile.medico.email}
+                  <strong>Email:</strong> {medico.email}
                 </p>
                 <p>
-                  <strong>Telefono:</strong> {profile.medico.telefono}
+                  <strong>Telefono:</strong> {medico.telefono}
                 </p>
                 <p>
-                  <strong>Specializzazione:</strong>{" "}
-                  {profile.medico.specializzazione}
+                  <strong>Specializzazione:</strong> {medico.specializzazione}
                 </p>
                 <p>
-                  <strong>Indirizzo:</strong> {profile.medico.indirizzo},{" "}
-                  {profile.medico.numero_civico}
+                  <strong>Indirizzo:</strong> {medico.indirizzo},{" "}
+                  {medico.numero_civico}
                 </p>
                 <p>
-                  <strong>Città:</strong> {profile.medico.cap} -{" "}
-                  {profile.medico.citta} ({profile.medico.regione})
+                  <strong>Città:</strong> {medico.cap} - {medico.citta} (
+                  {medico.regione})
                 </p>
                 <Button
                   label="primary"
