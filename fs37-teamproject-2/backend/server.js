@@ -12,6 +12,7 @@ import {
   eliminaPrenotazione,
   getPrenotazioni,
   getCentri,
+  getMedico,updateAsl
 } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
@@ -25,17 +26,21 @@ app.use(cors());
 
 app.get("/", getAll);
 app.get("/medici", getMedici);
-app.get("/centri", getCentri);
+app.get("/asl", getCentri);
 app.get("/utenti/:id/prenotazioni", getPrenotazioni);
+app.get("/utenti/:id/medico", getMedico);
 
 app.post("/registrazione", registrazione);
 app.post("/login", login);
 app.post("/:id/modifica", modificaDati);
 app.post("/utenti/:id/servizi", aggiungiPrenotazione);
-app.put("/utenti/:id/servizi/:idServizio", modificaPrenotazione);
+
 app.delete("/utenti/:id/servizi/:idServizio", eliminaPrenotazione);
 
+app.put("/utenti/:id/servizi/:idServizio", modificaPrenotazione);
 app.put("/utenti/:id/medico", updateMedico);
+app.put("/utenti/:id/asl", updateAsl);
+
 app.listen(PORT, () => {
   console.log(`Server attivo su http://localhost:${PORT}`);
 });

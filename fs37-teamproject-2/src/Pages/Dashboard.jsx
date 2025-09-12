@@ -54,7 +54,9 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchMedico = async () => {
-      const result = await fetch(`http://localhost:3000/${user.medico}/medico`);
+      const result = await fetch(
+        `http://localhost:3000/utenti/${user.medico}/medico`
+      );
       const data = await result.json();
       setMedico(data);
     };

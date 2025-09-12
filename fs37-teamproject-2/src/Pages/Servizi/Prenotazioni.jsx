@@ -11,7 +11,7 @@ export default function Prenotazioni() {
 
   // Funzione per caricare le prenotazioni dal DB
   
-
+  
   return (
     <div>
       <FullCalendar

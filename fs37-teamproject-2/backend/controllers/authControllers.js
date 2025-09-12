@@ -99,16 +99,6 @@ const getMedici = async (req, res) => {
     res.status(500).json({ message: "Errore nel recupero dei medici" });
   }
 };
-const getMedico = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const medici = await db.many(`SELECT * FROM medici where id=$1`, [id]);
-    res.json(medici); // Restituisci i medici come JSON
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Errore nel recupero dei medici" });
-  }
-};
 
 const updateMedico = async (req, res) => {
   const { id } = req.params; // L'ID dell'utente da aggiornare
@@ -140,6 +130,36 @@ const updateMedico = async (req, res) => {
       .json({ message: "Errore durante l'aggiornamento del medico" });
   }
 };
+const updateAsl = async (req, res) => {
+  const { id } = req.params; // L'ID dell'utente da aggiornare
+  const { asl } = req.body; // Medico che l'utente ha selezionato
+
+  try {
+    // Aggiorna l'utente con l'asl scelto
+    const result = await db.oneOrNone(
+      `
+      UPDATE utenti
+      SET asl = $1  
+      WHERE id = $2
+      RETURNING *;
+    `,
+      [asl, id]
+    );
+
+    if (result) {
+      res
+        .status(200)
+        .json({ message: "ASL aggiornato con successo", user: result });
+    } else {
+      res.status(404).json({ message: "Utente non trovato" });
+    }
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Errore durante l'aggiornamento dell'ASL" });
+  }
+};
 
 const modificaDati = async (req, res) => {
   try {
@@ -167,9 +187,9 @@ servizi.nome as nome_servizio,
 servizi.tipologia as tipologia_servizio,
 prenotazioni.data_prenotazione as data_prenotazione
 from prenotazioni
-join utenti on prenotazioni.id_cliente = utenti.id
+join utenti on prenotazioni.id_utente = utenti.id
 join servizi on prenotazioni.id_servizio = servizi.id
-where id_cliente=$1`,
+where id_utente=$1`,
       [id]
     );
 
@@ -244,11 +264,28 @@ const eliminaPrenotazione = async (req, res) => {
 
 const getCentri = async (req, res) => {
   try {
-    const centri = await db.many("SELECT * FROM centri");
+    const centri = await db.many("SELECT * FROM asl");
     res.json(centri);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Errore nel recupero dei centri" });
+    res.status(500).json({ message: "Errore nel recupero dell' ASL" });
+  }
+};
+
+const getMedico = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const medico = await db.oneOrNone(
+      `select * from medici
+      where id=$1`,
+      [id]
+    );
+
+    res.json(medico);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Nessun medico trovato." });
   }
 };
 
@@ -264,4 +301,6 @@ export {
   getMedici,
   updateMedico,
   getCentri,
+  getMedico,
+  updateAsl,
 };

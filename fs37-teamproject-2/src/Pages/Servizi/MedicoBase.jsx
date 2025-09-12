@@ -13,17 +13,8 @@ function MedicoBase() {
       try {
         const response = await fetch("http://localhost:3000/medici");
         const data = await response.json();
-        const medici = [];
-        data.forEach((x) => {
-          const medico = {
-            ...x,
-            foto: `https://randomuser.me/api/portraits/${
-              x.sesso === "F" ? "women" : "men"
-            }/${Math.floor(Math.random() * 50) + 1}.jpg`,
-          };
-          medici.push(medico);
-        });
-        setMediciDisponibili(medici);
+        console.log(data);
+        setMediciDisponibili(data);
       } catch (error) {
         console.error("Errore durante il recupero dei medici:", error);
       }

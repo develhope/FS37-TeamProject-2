@@ -1,18 +1,17 @@
-import db from "./db.js"
+import db from "./db.js";
 
-async function start () {
-    try {
-        await db.tx(
-            async (t) => {
-                await t.none(" DROP TABLE IF EXISTS prenotazioni CASCADE");
-                await t.none(" DROP TABLE IF EXISTS asl_medici CASCADE");
-                await t.none(" DROP TABLE IF EXISTS asl_servizi CASCADE");
-                await t.none(" DROP TABLE IF EXISTS medici");
-                await t.none(" DROP TABLE IF EXISTS asl");
-                await t.none(" DROP TABLE IF EXISTS servizi");
-                await t.none(" DROP TABLE IF EXISTS utenti");
+async function start() {
+  try {
+    await db.tx(async (t) => {
+      await t.none(" DROP TABLE IF EXISTS prenotazioni CASCADE");
+      await t.none(" DROP TABLE IF EXISTS asl_medici CASCADE");
+      await t.none(" DROP TABLE IF EXISTS asl_servizi CASCADE");
+      await t.none(" DROP TABLE IF EXISTS medici");
+      await t.none(" DROP TABLE IF EXISTS asl");
+      await t.none(" DROP TABLE IF EXISTS servizi");
+      await t.none(" DROP TABLE IF EXISTS utenti");
 
-                await t.none(`
+      await t.none(`
                     CREATE TABLE IF NOT EXISTS utenti (
                         id SERIAL PRIMARY KEY,
                         nome VARCHAR(100) NOT NULL,
@@ -30,11 +29,13 @@ async function start () {
                         citta TEXT NOT NULL,
                         sesso CHAR(1),
                         telefono VARCHAR(15),
-                        nazionalita TEXT NOT NULL
+                        nazionalita TEXT NOT NULL,
+                        medico int,
+                        asl int
                     )
     `);
 
-    await t.none(`
+      await t.none(`
       CREATE TABLE IF NOT EXISTS asl (
         id SERIAL PRIMARY KEY,
         nome VARCHAR(100) NOT NULL,
@@ -49,7 +50,7 @@ async function start () {
       )
     `);
 
-    await t.none(`
+      await t.none(`
       CREATE TABLE IF NOT EXISTS medici (
         id SERIAL PRIMARY KEY,
         nome VARCHAR(100) NOT NULL,
@@ -69,7 +70,7 @@ async function start () {
       )
     `);
 
-    await t.none(`
+      await t.none(`
       CREATE TABLE IF NOT EXISTS servizi (
         id SERIAL PRIMARY KEY,
         nome TEXT NOT NULL,
@@ -78,8 +79,8 @@ async function start () {
       )
     `);
 
-    // Una sola tabella prenotazioni
-    await t.none(`
+      // Una sola tabella prenotazioni
+      await t.none(`
       CREATE TABLE IF NOT EXISTS prenotazioni (
         id SERIAL PRIMARY KEY,
         id_utente INTEGER NOT NULL,
@@ -94,7 +95,7 @@ async function start () {
       )
     `);
 
-    await t.none(`
+      await t.none(`
       CREATE TABLE IF NOT EXISTS asl_servizi (
         id_asl INTEGER NOT NULL,
         id_servizio INTEGER NOT NULL,
@@ -105,9 +106,7 @@ async function start () {
       )
     `);
 
-    
-
-    await t.none(`
+      await t.none(`
       CREATE TABLE IF NOT EXISTS asl_medici (
         id_asl INTEGER NOT NULL,
         id_medico INTEGER NOT NULL,
@@ -131,14 +130,14 @@ VALUES
 ('Davide', 'Ferrari', 'FRRDVD82H14F205T', 'davide.ferrari@example.com', 'davidePass', '1982-08-14', 'Torino', 'Via Po', '10100', '5', 'Piemonte', 'Torino', 'M', '3337778888', 'Italiana'),
 ('Elisa', 'Conti', 'CNTELS99I30H501M', 'elisa.conti@example.com', 'elisaPass', '1999-09-30', 'Genova', 'Via XX Settembre', '16100', '88', 'Liguria', 'Genova', 'F', '3338889999', 'Italiana'),
 ('Stefano', 'Gallo', 'GLLSTF75L05H224H', 'stefano.gallo@example.com', 'stefanoPass', '1975-12-05', 'Milano', 'Via Manzoni', '20100', '100', 'Lombardia', 'Milano', 'M', '3339990000', 'Italiana'),
-('Sara', 'Fontana', 'FNTSRA91M22H703Y', 'sara.fontana@example.com', 'saraPass', '1991-11-22', 'Verona', 'Piazza Bra', '37100', '3', 'Veneto', 'Verona', 'F', '3330001111', 'Italiana');`)
-           
-    // 2. Popola medici (devono essere inseriti prima di centro_medici e prenotazioni)
+('Sara', 'Fontana', 'FNTSRA91M22H703Y', 'sara.fontana@example.com', 'saraPass', '1991-11-22', 'Verona', 'Piazza Bra', '37100', '3', 'Veneto', 'Verona', 'F', '3330001111', 'Italiana');`);
+
+      // 2. Popola medici (devono essere inseriti prima di centro_medici e prenotazioni)
       await t.none(`
         INSERT INTO medici (nome, cognome, codice_fiscale, email, indirizzo, cap, numero_civico, regione, citta, sesso, telefono, specializzazione, disponibilita, foto)
         VALUES
-          ('Marco', 'Verdi', 'VRDMRC70A01C352X', 'marco.verdi@medici.it', 'Via Medici', '20100', '7', 'Lombardia', 'Milano', 'M', '0312345678', 'Cardiologia', true, 'https://randomuser.me/api/portraits/man/20.jpg'),
-          ('Giulia', 'Neri', 'NERGLI92B22D612Y', 'giulia.neri@medici.it', 'Via Sanità', '10100', '3', 'Piemonte', 'Torino', 'F', '0321987654', 'Dermatologia', true, 'https://randomuser.me/api/portraits/woman/66.jpg');
+          ('Marco', 'Verdi', 'VRDMRC70A01C352X', 'marco.verdi@medici.it', 'Via Medici', '20100', '7', 'Lombardia', 'Milano', 'M', '0312345678', 'Cardiologia', true, 'https://randomuser.me/api/portraits/men/20.jpg'),
+          ('Giulia', 'Neri', 'NERGLI92B22D612Y', 'giulia.neri@medici.it', 'Via Sanità', '10100', '3', 'Piemonte', 'Torino', 'F', '0321987654', 'Dermatologia', true, 'https://randomuser.me/api/portraits/women/66.jpg');
       `);
 
       // 3. Popola asl
@@ -181,16 +180,11 @@ VALUES
           (2, 2, '2025-10-11 14:30:00',1),
           (1, 1, '2025-10-12 11:00:00',1);
       `);
-
-    
-    
-    
-    }
-        )
-        console.log("Operazione completata")
-    } catch (err){
-        console.log(err)
-    }
+    });
+    console.log("Operazione completata");
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-start().catch ((error) => console.error(error))
+start().catch((error) => console.error(error));
