@@ -4,13 +4,13 @@ async function start () {
     try {
         await db.tx(
             async (t) => {
-                await t.none("DROP TABLE prenotazioni");
-                await t.none("DROP TABLE asl_medici");
-                await t.none("DROP TABLE asl_servizi");
-                await t.none("DROP TABLE medici");
-                await t.none("DROP TABLE asl");
-                await t.none("DROP TABLE servizi");
-                await t.none("DROP TABLE utenti");
+                await t.none(" DROP TABLE IF EXISTS prenotazioni CASCADE");
+                await t.none(" DROP TABLE IF EXISTS asl_medici CASCADE");
+                await t.none(" DROP TABLE IF EXISTS asl_servizi CASCADE");
+                await t.none(" DROP TABLE IF EXISTS medici");
+                await t.none(" DROP TABLE IF EXISTS asl");
+                await t.none(" DROP TABLE IF EXISTS servizi");
+                await t.none(" DROP TABLE IF EXISTS utenti");
 
                 await t.none(`
                     CREATE TABLE IF NOT EXISTS utenti (
