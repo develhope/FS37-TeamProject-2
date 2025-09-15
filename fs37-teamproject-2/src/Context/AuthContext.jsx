@@ -67,7 +67,9 @@ function AuthProvider({ children }) {
         console.error("Errore durante il recupero degli eventi:", error);
       }
     }
-    fetchPrenotazioni();
+    if (user) {
+      fetchPrenotazioni();
+    }
   }, [user]);
 
   async function registrazione(userData) {
@@ -105,7 +107,8 @@ function AuthProvider({ children }) {
         setMessage,
         login,
         logout,
-        prenotazioni,elenco
+        prenotazioni,
+        elenco,
       }}
     >
       {children}

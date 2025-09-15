@@ -1,8 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../Context/AuthContext';
-import { useState, useEffect } from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebookF } from 'react-icons/fa';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
+import { useState, useEffect } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebookF } from "react-icons/fa";
 import Logo from "../assets/Logo/Logo-app.png";
 import { Button } from "../Components/Button";
 import { Input } from "../Components/Input";
@@ -10,9 +10,8 @@ import { Input } from "../Components/Input";
 function Login() {
   const navigate = useNavigate();
   const { login, message } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +29,8 @@ function Login() {
           />
           <h1 className="text-2xl font-bold mb-2">Benvenuto in MiCurApp</h1>
           <p className="text-sm text-[#006450]/80 max-w-xs">
-            Gestisci i tuoi appuntamenti, prescrizioni e referti in modo semplice e sicuro.
+            Gestisci i tuoi appuntamenti, prescrizioni e referti in modo
+            semplice e sicuro.
           </p>
         </div>
 
@@ -55,7 +55,15 @@ function Login() {
             />
 
             {message && (
-              <p className="text-red-500 text-sm text-center">{message}</p>
+              <p
+                className={
+                  message.includes("successo")
+                    ? "text-[#006450] text-sm text-center"
+                    : "text-red-500 text-sm text-center"
+                }
+              >
+                {message}
+              </p>
             )}
 
             <div className="flex justify-between items-center mt-2 mb-6">
@@ -78,13 +86,17 @@ function Login() {
                 <FcGoogle size={20} className="mr-2" /> Google
               </button>
               <button className="flex-1 flex items-center justify-center border border-gray-300 px-4 py-2 rounded-lg hover:border-[#006450] text-gray-600 transition">
-                <FaFacebookF size={20} color="#006450" className="mr-2" /> Facebook
+                <FaFacebookF size={20} color="#006450" className="mr-2" />{" "}
+                Facebook
               </button>
             </div>
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Non hai un account?{" "}
-              <Link to="/registrazione" className="text-[#006450] font-medium hover:underline">
+              <Link
+                to="/registrazione"
+                className="text-[#006450] font-medium hover:underline"
+              >
                 Registrati
               </Link>
             </p>

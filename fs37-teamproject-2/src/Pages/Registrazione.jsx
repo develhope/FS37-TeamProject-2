@@ -18,7 +18,7 @@ function Registrazione() {
   });
 
   const [step, setStep] = useState(1);
-  
+
   function handleChange(e) {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
@@ -37,8 +37,7 @@ function Registrazione() {
     user.password &&
     user.nome &&
     user.cognome &&
-    user.telefono
-    
+    user.telefono;
 
   const isStep2Complete =
     user.codice_fiscale &&
@@ -52,9 +51,26 @@ function Registrazione() {
     user.sesso &&
     user.nazionalita;
 
-  const handleNextStep = () => {
+  const handleNextStep = async (email) => {
+    try {
+      const result = await fetch("http://localhost:3000/checkEmail", {
+        body: JSON.stringify({ email: email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+      const data = await result.json();
+      console.log(data.check);
+      if (!data.check) {
+        setMessage(data.message);
+        return;
+      }
 
-    setStep(2);
+      setStep(2);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   const handleRegistrazione = async (e) => {
@@ -97,6 +113,7 @@ function Registrazione() {
               onChange={handleChange}
               mode="defaultInput"
             />
+            {message && <p className="text-red-500 text-sm mt-1">{message}</p>}
             {user.email && !isEmailValid(user.email) && (
               <p className="text-red-500 text-sm mt-1">Email non valida</p>
             )}
@@ -174,17 +191,11 @@ function Registrazione() {
             />
           </div>
 
-          {message && (
-            <p className="text-gray-500 font-bold text-center mt-2">
-              {message}
-            </p>
-          )}
-
           <div className="mt-6 flex justify-center">
             <Button
               label="primary"
               type="button"
-              operazione={handleNextStep}
+              operazione={() => handleNextStep(user.email)}
               disabled={!isStep1Complete}
             >
               Avanti
@@ -360,10 +371,9 @@ function Registrazione() {
               Sesso:
             </label>
             <select onChange={handleChange} name="sesso">
-              <option value={"M"} defaultValue={"M"}>
-                Maschio
-              </option>
+              <option value={"M"}>Maschio</option>
               <option value={"F"}>Femmina</option>
+              <option value={"A"}>Altro</option>
             </select>
           </div>
 

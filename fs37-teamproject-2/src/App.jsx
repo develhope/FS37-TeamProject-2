@@ -25,6 +25,7 @@ import ASLPiuVicina from "./Pages/Servizi/ASLPiuVicina";
 import MedicoBase from "./Pages/Servizi/MedicoBase";
 import Prenotazioni from "./Pages/Servizi/Prenotazioni";
 import Contatti from "./Pages/Contatti";
+import ToDashboard from "./Components/ToDashboard";
 
 function RequireOtp({ children }) {
   const ts = localStorage.getItem("otp_verified_at");
@@ -59,10 +60,24 @@ function App() {
             <Route path="/registrazione" element={<Registrazione />} />
 
             {/* Login */}
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={
+                <ToDashboard>
+                  <Login />
+                </ToDashboard>
+              }
+            />
 
             {/* Conferma OTP */}
-            <Route path="/conferma-otp" element={<ConfermaOTP />} />
+            <Route
+              path="/conferma-otp"
+              element={
+                
+                  <ConfermaOTP />
+                
+              }
+            />
 
             {/* Dashboard - Route privata */}
             <Route

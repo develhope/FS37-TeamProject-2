@@ -289,6 +289,22 @@ const getMedico = async (req, res) => {
   }
 };
 
+const checkEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const result = await db.oneOrNone(`Select * from utenti where email=$1`, [
+      email,
+    ]);
+    if (result) {
+      res.json({ message: "Email già registrata", check: false });
+    } else {
+      res.json({ message: "Email valida", check: true });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   registrazione,
   getAll,
@@ -303,4 +319,5 @@ export {
   getCentri,
   getMedico,
   updateAsl,
+  checkEmail,
 };
