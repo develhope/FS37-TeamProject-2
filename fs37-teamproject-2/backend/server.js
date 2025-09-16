@@ -15,6 +15,7 @@ import {
   getMedico,
   updateAsl,
   checkEmail,
+  getAslUtente
 } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
@@ -31,6 +32,8 @@ app.get("/medici", getMedici);
 app.get("/asl", getCentri);
 app.get("/utenti/:id/prenotazioni", getPrenotazioni);
 app.get("/utenti/:id/medico", getMedico);
+app.get("/utenti/:id/asl", getAslUtente);
+
 app.post("/checkEmail", checkEmail);
 
 app.post("/registrazione", registrazione);

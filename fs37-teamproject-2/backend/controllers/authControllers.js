@@ -141,7 +141,7 @@ const updateAsl = async (req, res) => {
     const result = await db.oneOrNone(
       `
       UPDATE utenti
-      SET asl_id = 1  
+      SET asl = $1  
       WHERE id = $2
       RETURNING *;
     `,
@@ -307,6 +307,30 @@ const checkEmail = async (req, res) => {
   }
 };
 
+const getAslUtente = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const utente = await db.oneOrNone(
+      `SELECT asl.*, utenti.id as utente_id
+       FROM utenti
+       JOIN asl ON utenti.asl = asl.id
+       WHERE utenti.id = $1`,
+      [id]
+    );
+
+    if (!utente) {
+      return res.status(404).json({ message: "ASL non trovata per l'utente" });
+    }
+
+    res.json(utente);
+  } catch (error) {
+    console.error("Errore nel recupero dell'ASL:", error);
+    res.status(500).json({ message: "Errore interno del server" });
+  }
+};
+
+
 export {
   registrazione,
   getAll,
@@ -322,4 +346,5 @@ export {
   getMedico,
   updateAsl,
   checkEmail,
+  getAslUtente
 };

@@ -68,7 +68,7 @@ function Dashboard() {
       }
       try {
         const result = await fetch(
-          `http://localhost:3000/utenti/${user.asl}/asl`
+          `http://localhost:3000/utenti/${user.id}/asl`
         );
         const data = await result.json();
         setAsl(data);
@@ -78,7 +78,7 @@ function Dashboard() {
       }
     };
     fetchAsl();
-  }, [user.asl]);
+  }, [user]);
 
   return (
     <main className="min-h-screen bg-[#FFFFFF] p-8">
