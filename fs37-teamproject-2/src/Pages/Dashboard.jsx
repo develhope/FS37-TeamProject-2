@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Dashboard() {
   const { user, setUser, logout, elenco } = useAuth();
   const [profile, setProfile] = useState(user);
-  const [medico, setMedico] = useState({});
+  const [medico, setMedico] = useState(null); 
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
@@ -54,14 +54,23 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchMedico = async () => {
-      const result = await fetch(
-        `http://localhost:3000/utenti/${user.medico}/medico`
-      );
-      const data = await result.json();
-      setMedico(data);
+      if (!user.medico) {
+        setMedico(null);
+        return;
+      }
+      try {
+        const result = await fetch(
+          `http://localhost:3000/utenti/${user.medico}/medico`
+        );
+        const data = await result.json();
+        setMedico(data);
+      } catch (err) {
+        console.error("Errore nel recupero del medico di base:", err);
+        setMedico(null);
+      }
     };
     fetchMedico();
-  }, []);
+  }, [user.medico]);
 
   // elimina il prenotazione prenotato dall'utente corrente
   // const handleRemoveprenotazione = (idprenotazione) => {
@@ -78,6 +87,7 @@ function Dashboard() {
   //   setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
   // };
   console.log(user.medico);
+
   return (
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="flex justify-between items-center mb-6">
@@ -193,7 +203,7 @@ function Dashboard() {
             </div>
           ) : (
             <div className="flex flex-col items-start space-y-4">
-              <p>Non hai ancora prenotato alcun prenotazione.</p>
+              <p>Non hai ancora prenotato alcun servizio.</p>
               <Button
                 label="primary"
                 operazione={() => navigate("/servizi/prenotazioni")}
@@ -264,7 +274,9 @@ function Dashboard() {
             </div>
           ) : (
             <div className="flex flex-col items-start space-y-4">
-              <p>Non hai ancora selezionato un medico di base.</p>
+              <p>
+                <strong>Scegli il tuo medico di base</strong>
+              </p>
               <Button
                 label="primary"
                 operazione={() => navigate("/servizi/medico-base")}
