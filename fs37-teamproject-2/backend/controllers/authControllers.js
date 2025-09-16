@@ -130,6 +130,8 @@ const updateMedico = async (req, res) => {
       .json({ message: "Errore durante l'aggiornamento del medico" });
   }
 };
+
+
 const updateAsl = async (req, res) => {
   const { id } = req.params; // L'ID dell'utente da aggiornare
   const { asl } = req.body; // Medico che l'utente ha selezionato
@@ -139,7 +141,7 @@ const updateAsl = async (req, res) => {
     const result = await db.oneOrNone(
       `
       UPDATE utenti
-      SET asl = $1  
+      SET asl_id = 1  
       WHERE id = $2
       RETURNING *;
     `,
