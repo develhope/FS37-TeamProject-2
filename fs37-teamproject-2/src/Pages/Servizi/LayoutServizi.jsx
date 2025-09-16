@@ -21,7 +21,7 @@ export default function LayoutServizi() {
         </h1>
 
         <nav className="mb-6" aria-label="Sottosezioni bacheca">
-          <ul className="flex flex-wrap gap-3">
+          <ul className="flex flex-wrap gap-6">
             {TABS.map(({ to, label, isLink }) => {
               const base =
                 "whitespace-nowrap text-sm sm:text-base rounded-xl border px-3.5 py-2 transition-colors focus:outline-none";
