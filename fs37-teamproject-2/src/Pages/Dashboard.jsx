@@ -206,7 +206,7 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Box La mia ASL (dinamica) */}
+        {/* Box La mia ASL */}
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">La mia ASL</h2>
 
@@ -256,7 +256,7 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Box Il mio medico di base (dinamico) */}
+        {/* Box Il mio medico di base */}
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Il mio medico di base</h2>
 
