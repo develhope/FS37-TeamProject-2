@@ -127,7 +127,7 @@ export default function ConfermaOTP() {
           </button>
         )}
 
-        {/* Countdown + progress (locale alla pagina) */}
+        
         <div className="mb-5">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-700">
