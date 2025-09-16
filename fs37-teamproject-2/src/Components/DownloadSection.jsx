@@ -14,7 +14,7 @@ const DownloadSection = () => {
           <p className="text-xl mb-8 opacity-90">
             Disponibile gratuitamente su iOS e Android
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a href="#" className="inline-block">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
