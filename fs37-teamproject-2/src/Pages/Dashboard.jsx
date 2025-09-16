@@ -7,21 +7,10 @@ function Dashboard() {
   const { user, setUser, logout, elenco } = useAuth();
   const [profile, setProfile] = useState(user);
   const [medico, setMedico] = useState(null); 
+  const [asl, setAsl] = useState(null);
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     const users = JSON.parse(localStorage.getItem("users")) || [];
-  //     const currentUser = users.find(u => u.email === user.email);
-  //     console.log(profile);
-
-  //   if (currentUser) {
-  //     currentUser.serviziPrenotati = currentUser.serviziPrenotati || [];
-  //     currentUser.medico = currentUser.medico || null;
-  //   }
-
-  //   setProfile(user || {});
-  // }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,21 +61,30 @@ function Dashboard() {
     fetchMedico();
   }, [user.medico]);
 
-  // elimina il prenotazione prenotato dall'utente corrente
-  // const handleRemoveprenotazione = (idprenotazione) => {
-  //   const utenti = JSON.parse(localStorage.getItem("users")) || [];
-  //   const idx = utenti.findIndex(u => u.email === user.email);
-  //   if (idx === -1) return;
+ 
+  // console.log(user.medico);
 
-  //   const curr = utenti[idx];
-  //   const nuoviServizi = (curr.serviziPrenotati || []).filter(s => s.id !== idprenotazione);
-  //   curr.serviziPrenotati = nuoviServizi;
+   useEffect(() => {
+    const fetchAsl = async () => {
+      if (!user.asl) {
+        setAsl(null);
+        return;
+      }
+      try {
+        const result = await fetch(
+          `http://localhost:3000/utenti/${user.asl}/asl`
+        );
+        const data = await result.json();
+        setAsl(data);
+      } catch (err) {
+        console.error("Errore nel recupero dell'ASL:", err);
+        setAsl(null);
+      }
+    };
+    fetchAsl();
+  }, [user.asl]);
 
-  //   localStorage.setItem("users", JSON.stringify(utenti));
-  //   setUser(curr);          // aggiorna il context Auth
-  //   setProfile(curr);       // opzionale: aggiorna lo state locale se vuoi vedere l’update immediato
-  // };
-  console.log(user.medico);
+ 
 
   return (
     <main className="min-h-screen p-8 bg-gray-50">
@@ -217,16 +215,52 @@ function Dashboard() {
         {/* Box La mia ASL */}
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">La mia ASL</h2>
-          <p>
-            <strong>Nome ASL:</strong> Esempio SRL
-          </p>
-          <p>
-            <strong>Indirizzo:</strong> Via Esempio 123, Città
-          </p>
-          <p>
-            <strong>Numero contatto:</strong> 0123-456789
-          </p>
-          <Button label="primary">Cambia ASL</Button>
+
+          {asl ? (
+            <div className="flex space-x-4">
+
+              <div className="flex-grow space-y-1">
+                <p>
+                  <strong>Nome:</strong> {asl.nome} {asl.codice_identificativo}
+                </p>
+                <p>
+                  <strong>Email:</strong> {asl.email}
+                </p>
+                <p>
+                  <strong>Telefono:</strong> {asl.telefono}
+                </p>
+                <p>
+                  <strong>CAP:</strong> {asl.cap}
+                </p>
+                <p>
+                  <strong>Indirizzo:</strong> {asl.indirizzo},{" "}
+                  {asl.numero_civico}
+                </p>
+                <p>
+                  <strong>Città:</strong> {asl.cap} - {asl.citta} (
+                  {asl.regione})
+                </p>
+                <Button
+                  label="primary"
+                  operazione={() => navigate("/servizi/asl-piu-vicina")}
+                >
+                  Cambia ASL
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-start space-y-4">
+              <p>
+                <strong>Seleziona la tua ASL</strong>
+              </p>
+              <Button
+                label="primary"
+                operazione={() => navigate("/servizi/asl-piu-vicina")}
+              >
+                Scegli ASL
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Box Il mio medico di base */}
