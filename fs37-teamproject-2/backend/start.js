@@ -31,7 +31,7 @@ async function start() {
                         telefono VARCHAR(15),
                         nazionalita TEXT NOT NULL,
                         medico int,
-                        asl_id INT REFERENCES asl(id)
+                        asl int
                     )
     `);
 
