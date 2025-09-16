@@ -1,36 +1,28 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import * as OTPAuth from "otpauth";
-import { useAuth } from "../Context/AuthContext";
 
-/**
- * ⚠️ Dev vs Prod:
- *   - In DEV puoi mostrare il codice attuale per test (toggle showDemoCode)
- *   - In PROD tienilo nascosto e fai usare un'app TOTP (Google/Microsoft Authenticator, etc.)
- */
-
-const VERIFIED_KEY = "otp_verified_at"; // timestamp ms del momento di verifica
-const PERIOD_MS = 60_000; // 60 secondi
+const VERIFIED_KEY = "otp_verified_at";
+const PERIOD_MS = 60_000;
 
 function now() {
   return Date.now();
 }
 
-function msToNextTick() {
-  return PERIOD_MS - (now() % PERIOD_MS);
-}
-
 export default function ConfermaOTP() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const next = searchParams.get("next") || "/"; // pagina di destinazione post-verifica
+  const next = searchParams.get("next") || "/";
 
-  // Recupero segreto salvato per l'utente (registrazione/login lo inseriscono nel record utente o in localStorage)
-   
-  const [totp, setTotp] = useState(() =>
-     localStorage.getItem("topSecretB32") || localStorage.getItem("mfa_secret") || ""
+  const secretBase32 =
+    localStorage.getItem("topSecretB32") ||
+    localStorage.getItem("mfa_secret") ||
+    null;
+
+  const [totp] = useState(() =>
+    secretBase32
       ? new OTPAuth.TOTP({
-          secret: OTPAuth.Secret.fromBase32( localStorage.getItem("topSecretB32")),
+          secret: OTPAuth.Secret.fromBase32(secretBase32),
           digits: 6,
           period: 60,
           algorithm: "SHA1",
@@ -38,16 +30,28 @@ export default function ConfermaOTP() {
       : null
   );
 
-  const [timeLeft, setTimeLeft] = useState(msToNextTick());
+  // Countdown locale: parte da 60s quando apri la pagina
+  const [timeLeft, setTimeLeft] = useState(PERIOD_MS);
+  const deadlineRef = useRef(now() + PERIOD_MS);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const left = deadlineRef.current - now();
+      if (left <= 0) {
+        // resetta un nuovo “blocco” da 60s
+        deadlineRef.current = now() + PERIOD_MS;
+        setTimeLeft(PERIOD_MS);
+      } else {
+        setTimeLeft(left);
+      }
+    }, 250);
+    return () => clearInterval(id);
+  }, []);
+
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [ok, setOk] = useState("");
-  const [showDemoCode, setShowDemoCode] = useState(false); // di default nascosto
-
-  useEffect(() => {
-    const id = setInterval(() => setTimeLeft(msToNextTick()), 250);
-    return () => clearInterval(id);
-  }, []);
+  const [showDemoCode, setShowDemoCode] = useState(false);
 
   const secondsLeft = useMemo(() => Math.ceil(timeLeft / 1000), [timeLeft]);
   const progressPct = useMemo(
@@ -75,7 +79,7 @@ export default function ConfermaOTP() {
     e.preventDefault();
     setError("");
     setOk("");
-    const delta = totp.validate({ token: input.trim(), window: 1 }); // 0 = corrente, ±1 = margine
+    const delta = totp.validate({ token: input.trim(), window: 1 });
     if (delta === 0 || delta === -1 || delta === 1) {
       localStorage.setItem(VERIFIED_KEY, String(now()));
       setOk("OTP valido! Reindirizzo…");
@@ -94,12 +98,10 @@ export default function ConfermaOTP() {
           Verifica OTP
         </h1>
         <p className="text-sm text-center text-gray-600 mb-6">
-          Inserisci il codice a 6 cifre generato dall'app di
-          autenticazione.
+          Inserisci il codice a 6 cifre generato dall'app di autenticazione.
         </p>
 
-        {/* DEMO: Mostra codice corrente (solo dev) */}
-        {showDemoCode && (
+        {showDemoCode ? (
           <div className="mb-4 p-3 rounded-xl bg-gray-100 flex items-center justify-between">
             <div>
               <div className="text-xs uppercase tracking-wide text-gray-500">
@@ -116,8 +118,7 @@ export default function ConfermaOTP() {
               Copia
             </button>
           </div>
-        )}
-        {!showDemoCode && (
+        ) : (
           <button
             onClick={() => setShowDemoCode(true)}
             className="mb-4 px-3 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-100"
@@ -126,10 +127,12 @@ export default function ConfermaOTP() {
           </button>
         )}
 
-        {/* Countdown + progress */}
+        {/* Countdown + progress (locale alla pagina) */}
         <div className="mb-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-700">Nuovo codice tra</span>
+            <span className="text-sm text-gray-700">
+              Tempo rimasto per inserire il codice
+            </span>
             <span className="font-mono text-sm font-semibold">
               {secondsLeft}s
             </span>
@@ -181,8 +184,6 @@ export default function ConfermaOTP() {
             </button>
           </div>
         </form>
-
-        
       </div>
     </div>
   );
