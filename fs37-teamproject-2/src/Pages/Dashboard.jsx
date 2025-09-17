@@ -200,7 +200,7 @@ function Dashboard() {
                 label="primary"
                 operazione={() => navigate("/servizi/prenotazioni")}
               >
-                Aggiungi Servizi
+                Prenota servizio
               </Button>
             </div>
           )}

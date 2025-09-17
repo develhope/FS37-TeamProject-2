@@ -4,6 +4,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import itLocale from "@fullcalendar/core/locales/it";
 import { useAuth } from "../../Context/AuthContext";
+import { Button } from "../../Components/Button";
+import { Input } from "../../Components/Input";
 
 function sameDay(a, b) {
   return (
@@ -12,9 +14,16 @@ function sameDay(a, b) {
     a.getDate() === b.getDate()
   );
 }
-
 export default function Prenotazioni() {
+  function handlePrenota() {
+    // richiesta post su questi dati.
+  }
   const { prenotazioni } = useAuth();
+  const [prenota, setPrenota] = useState(false);
+  // nuovi useState per prenotazioni calendario
+  const [data, setData] = useState(null);
+  const [servizio, setServizio] = useState(null);
+  const [medico, setMedico] = useState(null);
 
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 640 : false
@@ -232,31 +241,33 @@ export default function Prenotazioni() {
         </div>
       )}
 
-      {/* Stile mobile */}
-      <style>{`
-        @media (max-width: 639px) {
-          .mobile-daycell { padding: 0 !important; min-height: 56px; background: #FFFFFF; }
-          .fc .fc-daygrid-day-frame { padding: 2px 2px 22px 2px; }
-          .fc .fc-daygrid-day-top { display: none; }
-          .fc .fc-toolbar-title { font-size: 1rem; font-weight: 600; color: #1F2937; }
-          .fc .fc-col-header-cell-cushion { padding: 6px 0; font-size: 0.75rem; color: #1F2937; }
-
-          
-          .fc .fc-daygrid-day-events {
-            position: absolute; left: 4px; right: 4px; bottom: 4px;
-            display: flex; flex-direction: column; gap: 4px; overflow: hidden;
-            max-height: 28px;
-          }
-
-          
-          .fc .fc-daygrid-event-harness { margin: 0; }
-          .fc .fc-more-link { color: #006450; }
-        }
-        
-        .fc a { color: #006450; }
-        .fc .fc-highlight { background: #FFFDD0; }
-        .fc .fc-daygrid-day-number { color: #1F2937; }
-      `}</style>
+      <Button label="primary" operazione={() => setPrenota(!prenota)}>
+        Prenota
+      </Button>
+      {prenota ? (
+        <form onSubmit={handlePrenota}>
+          <label>Seleziona servizio</label>
+          <select>
+            <option value="Visita">Visita</option>
+          </select>
+          <label>Seleziona Medico</label>
+          <select>
+            <option value="Medico">Medico</option>
+          </select>
+          <Input
+            onChange={(e) => console.log(e.target.value)}
+            type="date"
+            placeholder="Prenota"
+            mode={"defaultInput"}
+            value={"Prova"}
+          />
+          <Button type="submit" label="primary">
+            Prenota
+          </Button>
+        </form>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
