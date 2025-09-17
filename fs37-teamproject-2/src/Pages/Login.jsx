@@ -22,11 +22,13 @@ function Login() {
     <div className="min-h-screen flex flex-col font-poppins bg-gray-50">
       <main className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-50">
         <div className="flex flex-col mb-10 items-center text-center text-[#006450]">
+          <Link to="/">
           <img
             src={Logo}
             alt="MiCurApp Logo"
             className="h-20 w-auto bg-white p-1 rounded shadow-md mb-4"
           />
+          </Link>
           <h1 className="text-2xl font-bold mb-2">Benvenuto in MiCurApp</h1>
           <p className="text-sm text-[#006450]/80 max-w-xs">
             Gestisci i tuoi appuntamenti, prescrizioni e referti in modo

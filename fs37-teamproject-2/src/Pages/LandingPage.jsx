@@ -5,6 +5,8 @@ import ServiziSection from "../Components/ServiziSection";
 import DownloadSection from "../Components/DownloadSection";
 import FAQSection from "../Components/FAQSection";
 import Footer from "../Components/Footer";
+import MediciImg from "../assets/Immagini/MediciImg.png";
+
 
 
 
@@ -13,6 +15,13 @@ const LandingPage = () => {
     <div className="min-h-screen w-full bg-[#FFFFF0] font-poppins">
       <Header />
       <HeroSection />
+       <div className="w-full flex justify-center my-8 px-4">
+        <img
+          src={MediciImg}
+          alt="Personale medico"
+          className="max-w-4xl w-full rounded-xl shadow-md"
+        />
+      </div>
       <ServiziSection />
       <DownloadSection />
       <FAQSection />

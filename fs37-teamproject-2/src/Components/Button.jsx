@@ -11,12 +11,18 @@ const typeButton = {
     "bg-[#006450] text-white px-7 py-2 rounded opacity-50 cursor-not-allowed",
 };
 
-export const Button = ({ label, children, operazione, type = "button", disabled }) => {
+export const Button = ({ label, children, operazione, type = "button", disabled, noHover = true }) => {
   let className = typeButton.disableButton;
 
   if (label === "primary") className = disabled ? typeButton.disableButton : typeButton.primaryButton;
   else if (label === "secondary") className = typeButton.secondaryButton;
   else if (label === "tertiary") className = typeButton.tertiaryButton;
+if (noHover) {
+  className = className
+    .split(" ")
+    .filter((cls) => !cls.startsWith("hover:"))
+    .join(" ");
+}
 
   return (
     <button

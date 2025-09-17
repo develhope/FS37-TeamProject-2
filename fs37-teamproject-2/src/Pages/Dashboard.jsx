@@ -84,7 +84,7 @@ function Dashboard() {
     <main className="min-h-screen bg-[#FFFFFF] p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-[#006450]">Dashboard</h1>
-        <Button label="secondary" operazione={handleLogout}>
+        <Button className="w-36 h-10" label="secondary" operazione={handleLogout}>
           Logout
         </Button>
       </div>
@@ -133,7 +133,7 @@ function Dashboard() {
                 placeholder="Telefono"
               />
               <div className="flex justify-end mt-3">
-                <Button label="primary" operazione={handleSave}>
+                <Button label="primary" className="w-36 h-10" operazione={handleSave}>
                   Salva
                 </Button>
               </div>
@@ -152,8 +152,8 @@ function Dashboard() {
               <p>
                 <strong>Telefono:</strong> {profile.telefono}
               </p>
-              <div className="flex justify-end mt-3">
-                <Button label="secondary" operazione={() => setEditing(true)}>
+              <div className="flex mt-3">
+                <Button label="primary" className="w-36 h-10" operazione={() => setEditing(true)}>
                   Modifica
                 </Button>
               </div>
@@ -185,6 +185,7 @@ function Dashboard() {
                   <div className="flex flex-col gap-2">
                     <Button
                       label="primary"
+                      className="w-36 h-10"
                       operazione={() => navigate("/servizi/prenotazioni")}
                     >
                       Vedi
@@ -197,10 +198,10 @@ function Dashboard() {
             <div className="flex flex-col items-start space-y-4">
               <p>Non hai ancora prenotato alcun servizio.</p>
               <Button
-                label="primary"
+                label="primary" className="w-36 h-10"
                 operazione={() => navigate("/servizi/prenotazioni")}
               >
-                Prenota servizio
+                Prenota
               </Button>
             </div>
           )}
@@ -234,7 +235,7 @@ function Dashboard() {
                   )
                 </p>
                 <Button
-                  label="primary"
+                  label="primary" className="w-36 h-10"
                   operazione={() => navigate("/servizi/asl-piu-vicina")}
                 >
                   Cambia ASL
@@ -244,75 +245,74 @@ function Dashboard() {
           ) : (
             <div className="flex flex-col items-start space-y-4">
               <p>
-                <strong>Seleziona la tua ASL</strong>
+                <p>Seleziona la tua ASL</p>
               </p>
-              <Button
+              <Button className="w-36 h-10"
                 label="primary"
                 operazione={() => navigate("/servizi/asl-piu-vicina")}
               >
-                Scegli ASL
+                Seleziona
               </Button>
             </div>
           )}
         </div>
 
         {/* Box Il mio medico di base */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Il mio medico di base</h2>
+<div className="bg-white rounded-2xl shadow-lg p-6">
+  <h2 className="text-2xl font-semibold mb-4">Il mio medico di base</h2>
 
-          {medico ? (
-            <div className="flex space-x-4">
-              <div className="flex-shrink-0">
-                <img
-                  src={medico.foto || "https://via.placeholder.com/100"}
-                  alt={`Foto di ${medico.nome}`}
-                  className="w-24 h-24 rounded-full object-cover border"
-                />
-              </div>
+  {medico ? (
+    <div className="flex space-x-4">
+      {/* Testo a sinistra */}
+      <div className="flex-grow space-y-1 text-justify">
+        <p>
+          <strong>Nome:</strong> {medico.nome} {medico.cognome}
+        </p>
+        <p>
+          <strong>Email:</strong> {medico.email}
+        </p>
+        <p>
+          <strong>Telefono:</strong> {medico.telefono}
+        </p>
+        <p>
+          <strong>Specializzazione:</strong> {medico.specializzazione}
+        </p>
+        <p>
+          <strong>Indirizzo:</strong> {medico.indirizzo}, {medico.numero_civico}
+        </p>
+        <p>
+          <strong>Città:</strong> {medico.cap} - {medico.citta} ({medico.regione})
+        </p>
+        <Button
+          label="primary" className="w-36 h-10"
+          operazione={() => navigate("/servizi/medico-base")}
+        >
+          Cambia Medico
+        </Button>
+      </div>
 
-              <div className="flex-grow space-y-1">
-                <p>
-                  <strong>Nome:</strong> {medico.nome} {medico.cognome}
-                </p>
-                <p>
-                  <strong>Email:</strong> {medico.email}
-                </p>
-                <p>
-                  <strong>Telefono:</strong> {medico.telefono}
-                </p>
-                <p>
-                  <strong>Specializzazione:</strong> {medico.specializzazione}
-                </p>
-                <p>
-                  <strong>Indirizzo:</strong> {medico.indirizzo},{" "}
-                  {medico.numero_civico}
-                </p>
-                <p>
-                  <strong>Città:</strong> {medico.cap} - {medico.citta} (
-                  {medico.regione})
-                </p>
-                <Button
-                  label="primary"
-                  operazione={() => navigate("/servizi/medico-base")}
-                >
-                  Cambia Medico
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-start space-y-4">
-              <p>
-                <strong>Scegli il tuo medico di base</strong>
-              </p>
-              <Button
-                label="primary"
-                operazione={() => navigate("/servizi/medico-base")}
-              >
-                Scegli Medico
-              </Button>
-            </div>
-          )}
-        </div>
+      {/* Immagine a destra */}
+      <div className="flex-shrink-0">
+        <img
+          src={medico.foto || "https://via.placeholder.com/100"}
+          alt={`Foto di ${medico.nome}`}
+          className="w-24 h-24 rounded-full object-cover border"
+        />
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-col items-start space-y-4">
+      <p>Scegli il tuo medico di base</p>
+      <Button className="w-36 h-10"
+        label="primary"
+        operazione={() => navigate("/servizi/medico-base")}
+      >
+        Seleziona
+      </Button>
+    </div>
+  )}
+</div>
+
       </div>
     </main>
   );
