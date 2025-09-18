@@ -99,6 +99,15 @@ const getMedici = async (req, res) => {
     res.status(500).json({ message: "Errore nel recupero dei medici" });
   }
 };
+const getServizi = async (req, res) => {
+  try {
+    const servizi = await db.many("SELECT * FROM servizi");
+    res.json(servizi); // Restituisci i servizi come JSON
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Errore nel recupero dei servizi" });
+  }
+};
 
 const updateMedico = async (req, res) => {
   const { id } = req.params; // L'ID dell'utente da aggiornare
@@ -130,7 +139,6 @@ const updateMedico = async (req, res) => {
       .json({ message: "Errore durante l'aggiornamento del medico" });
   }
 };
-
 
 const updateAsl = async (req, res) => {
   const { id } = req.params; // L'ID dell'utente da aggiornare
@@ -330,7 +338,6 @@ const getAslUtente = async (req, res) => {
   }
 };
 
-
 export {
   registrazione,
   getAll,
@@ -346,5 +353,6 @@ export {
   getMedico,
   updateAsl,
   checkEmail,
-  getAslUtente
+  getAslUtente,
+  getServizi,
 };

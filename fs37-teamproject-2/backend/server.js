@@ -15,7 +15,8 @@ import {
   getMedico,
   updateAsl,
   checkEmail,
-  getAslUtente
+  getAslUtente,
+  getServizi,
 } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
@@ -29,13 +30,13 @@ app.use(cors());
 
 app.get("/", getAll);
 app.get("/medici", getMedici);
+app.get("/servizi", getServizi);
 app.get("/asl", getCentri);
 app.get("/utenti/:id/prenotazioni", getPrenotazioni);
 app.get("/utenti/:id/medico", getMedico);
 app.get("/utenti/:id/asl", getAslUtente);
 
 app.post("/checkEmail", checkEmail);
-
 app.post("/registrazione", registrazione);
 app.post("/login", login);
 app.post("/:id/modifica", modificaDati);

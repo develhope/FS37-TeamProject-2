@@ -24,6 +24,8 @@ export default function Prenotazioni() {
   const [data, setData] = useState(null);
   const [servizio, setServizio] = useState(null);
   const [medico, setMedico] = useState(null);
+  const [servizi, setServizi] = useState([]);
+  const [medici, setMedici] = useState([]);
 
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 640 : false
@@ -39,6 +41,24 @@ export default function Prenotazioni() {
       clearTimeout(t);
       window.removeEventListener("resize", onResize);
     };
+  }, []);
+
+  useEffect(() => {
+    async function fetchDati() {
+      try {
+        const result = await fetch("http://localhost:3000/servizi");
+        const result2 = await fetch("http://localhost:3000/medici");
+        const servizi = await result.json();
+        const medici = await result2.json();
+        if (result.ok && result2.ok) {
+          setServizi(servizi);
+          setMedici(medici);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchDati();
   }, []);
 
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -248,16 +268,31 @@ export default function Prenotazioni() {
         <form onSubmit={handlePrenota}>
           <label>Seleziona servizio</label>
           <select>
-            <option value="Visita">Visita</option>
+            {servizi.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.nome}
+              </option>
+            ))}
           </select>
           <label>Seleziona Medico</label>
           <select>
-            <option value="Medico">Medico</option>
+            {medici.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.nome} {m.cognome}
+              </option>
+            ))}
           </select>
           <Input
             onChange={(e) => console.log(e.target.value)}
             type="date"
             placeholder="Prenota"
+            mode={"defaultInput"}
+            value={"Prova"}
+          />
+          <Input
+            onChange={(e) => console.log(e.target.value)}
+            type="time"
+            placeholder="Orario"
             mode={"defaultInput"}
             value={"Prova"}
           />
