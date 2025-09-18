@@ -212,15 +212,14 @@ where id_utente=$1`,
   }
 };
 
-const aggiungiPrenotazione = async (req, res) => {
-  const { id } = req.params; // id utente
-  const { id_servizio, note } = req.body;
+const prenota = async (req, res) => {
+  const { idUtente, data, medico, servizio } = req.body;
 
   try {
     await db.none(
-      `INSERT INTO prenotazioni (id_utente, id_servizio, note)
-       VALUES ($1, $2, $3)`,
-      [id, id_servizio, note || null]
+      `INSERT INTO prenotazioni (id_utente, id_servizio, id_medico, data_prenotazione)
+       VALUES ($1, $2, $3,$4)`,
+      [idUtente, servizio, medico, data]
     );
 
     res.json({ message: "Prenotazione aggiunta con successo." });
@@ -343,7 +342,7 @@ export {
   getAll,
   login,
   modificaDati,
-  aggiungiPrenotazione,
+  prenota,
   modificaPrenotazione,
   eliminaPrenotazione,
   getPrenotazioni,

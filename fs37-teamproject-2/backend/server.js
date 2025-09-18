@@ -8,7 +8,6 @@ import {
   getMedici,
   modificaDati,
   modificaPrenotazione,
-  aggiungiPrenotazione,
   eliminaPrenotazione,
   getPrenotazioni,
   getCentri,
@@ -17,6 +16,7 @@ import {
   checkEmail,
   getAslUtente,
   getServizi,
+  prenota,
 } from "./controllers/authControllers.js";
 import dotenv from "dotenv";
 
@@ -40,7 +40,7 @@ app.post("/checkEmail", checkEmail);
 app.post("/registrazione", registrazione);
 app.post("/login", login);
 app.post("/:id/modifica", modificaDati);
-app.post("/utenti/:id/servizi", aggiungiPrenotazione);
+app.post("/prenota", prenota);
 
 app.delete("/utenti/:id/servizi/:idServizio", eliminaPrenotazione);
 

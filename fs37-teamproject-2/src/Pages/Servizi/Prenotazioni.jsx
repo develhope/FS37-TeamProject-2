@@ -15,21 +15,50 @@ function sameDay(a, b) {
   );
 }
 export default function Prenotazioni() {
-  function handlePrenota() {
-    // richiesta post su questi dati.
-  }
-  const { prenotazioni } = useAuth();
+  const { user, prenotazioni, message, setMessage } = useAuth();
   const [prenota, setPrenota] = useState(false);
-  // nuovi useState per prenotazioni calendario
   const [data, setData] = useState(null);
-  const [servizio, setServizio] = useState(null);
-  const [medico, setMedico] = useState(null);
+  const [giorno, setGiorno] = useState(null);
+  const [orario, setOrario] = useState(null);
+  const [servizio, setServizio] = useState(1);
+  const [medico, setMedico] = useState(1);
   const [servizi, setServizi] = useState([]);
   const [medici, setMedici] = useState([]);
 
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 640 : false
   );
+  async function handlePrenota(e) {
+    // richiesta post su questi dati.
+    e.preventDefault();
+    try {
+      const result = await fetch("http://localhost:3000/prenota", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          data: data,
+          medico: medico,
+          servizio: servizio,
+          idUtente: user.id,
+        }),
+      });
+      const response = await result.json();
+      if (result.ok) {
+        setMessage(`Prenotazione avvenuta con successo`);
+        setTimeout(()=>{
+          setMessage(null)
+        },2000)
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage(`Errore in fase di prenotazione`);
+      setTimeout(()=>{
+          setMessage(null)
+        },2000)
+    }
+  }
   useEffect(() => {
     let t;
     const onResize = () => {
@@ -60,6 +89,8 @@ export default function Prenotazioni() {
     }
     fetchDati();
   }, []);
+
+  useEffect(() => setData(`${giorno} ${orario}`), [orario, giorno]);
 
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetDate, setSheetDate] = useState(null);
@@ -261,13 +292,14 @@ export default function Prenotazioni() {
         </div>
       )}
 
+      {message && <p>{message}</p>}
       <Button label="primary" operazione={() => setPrenota(!prenota)}>
         Prenota
       </Button>
-      {prenota ? (
+      { !message && prenota ? (
         <form onSubmit={handlePrenota}>
           <label>Seleziona servizio</label>
-          <select>
+          <select onChange={(e) => setServizio(e.target.value)}>
             {servizi.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.nome}
@@ -275,7 +307,7 @@ export default function Prenotazioni() {
             ))}
           </select>
           <label>Seleziona Medico</label>
-          <select>
+          <select onChange={(e) => setMedico(e.target.value)}>
             {medici.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.nome} {m.cognome}
@@ -283,18 +315,18 @@ export default function Prenotazioni() {
             ))}
           </select>
           <Input
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => setGiorno(e.target.value)}
             type="date"
             placeholder="Prenota"
             mode={"defaultInput"}
-            value={"Prova"}
+            value={giorno}
           />
           <Input
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => setOrario(e.target.value)}
             type="time"
             placeholder="Orario"
             mode={"defaultInput"}
-            value={"Prova"}
+            value={orario}
           />
           <Button type="submit" label="primary">
             Prenota
