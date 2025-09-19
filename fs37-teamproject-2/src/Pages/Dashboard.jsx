@@ -9,7 +9,7 @@ function Dashboard() {
   const [medico, setMedico] = useState(null);
   const [asl, setAsl] = useState(null);
   const [editing, setEditing] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -180,40 +180,42 @@ function Dashboard() {
 
           {elenco.length > 0 ? (
             <div className="space-y-4">
-              {(showAll ? elenco : elenco.slice(0, 3)).map((prenotazione, i) => (
-                <div
-                  key={i}
-                  className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
-                >
-                  <div className="flex-grow space-y-1">
-                    <p>
-                      <strong>Nome:</strong> {prenotazione.nome_servizio}
-                    </p>
-                    <p>
-                      <strong>Tipologia:</strong>{" "}
-                      {prenotazione.tipologia_servizio}
-                    </p>
-                  </div>
+              {(elenco.slice(0, 3)).map(
+                (prenotazione, i) => (
+                  <div
+                    key={i}
+                    className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
+                  >
+                    <div className="flex-grow space-y-1">
+                      <p>
+                        <strong>Nome:</strong> {prenotazione.nome_servizio}
+                      </p>
+                      <p>
+                        <strong>Tipologia:</strong>{" "}
+                        {prenotazione.tipologia_servizio}
+                      </p>
+                    </div>
 
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      label="primary"
-                      className="w-36 h-10"
-                      operazione={() => navigate("/servizi/prenotazioni")}
-                    >
-                      Vedi
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        label="primary"
+                        className="w-36 h-10"
+                        operazione={() => navigate("/servizi/prenotazioni")}
+                      >
+                        Vedi
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
               {elenco.length > 3 && (
                 <div className="flex mt-4">
                   <Button
                     label="primary"
                     className="w-36 h-10"
-                    operazione={() => setShowAll((prev) => !prev)}
+                    operazione={() => navigate("/servizi/prenotazioni")}
                   >
-                    {showAll ? "Mostra meno" : "Vedi di più"}
+                    Vedi tutte
                   </Button>
                 </div>
               )}
