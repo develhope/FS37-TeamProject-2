@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Button } from "../Components/Button";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 
 function Dashboard() {
   const { user, setUser, logout, elenco } = useAuth();
@@ -82,16 +83,14 @@ function Dashboard() {
 
   return (
     <main className="min-h-screen bg-[#FFFFFF] p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-[#006450]">Dashboard</h1>
-        <Button
-          className="w-36 h-10"
-          label="secondary"
-          operazione={handleLogout}
-        >
-          Logout
-        </Button>
-      </div>
+     <div className="max-w-5xl mx-auto">
+  <div className="flex flex-col gap-5 ">
+  <h1 className="text-2xl sm:text-3xl font-bold mb-5 text-[#006450]">
+    Dashboard
+  </h1>
+  <Navbar />
+  </div>
+</div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Box dati profilo */}
