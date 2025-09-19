@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Button } from "../Components/Button";
 import { useNavigate } from "react-router-dom";
+import { EditIcon } from "./Servizi/Documentazione";
 
 function Dashboard() {
   const { user, setUser, logout, elenco } = useAuth();
@@ -163,11 +164,12 @@ function Dashboard() {
               <div className="flex mt-3">
                 <Button
                   label="primary"
-                  className="w-36 h-10"
+                  className="p-1.5 rounded-md border border-gray-200"
                   operazione={() => setEditing(true)}
                 >
-                  Modifica
+                  <EditIcon className="h-5 w-5 text-neutral-50" />
                 </Button>
+                
               </div>
             </div>
           )}
