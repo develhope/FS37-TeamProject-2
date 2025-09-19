@@ -22,5 +22,7 @@ Pensata in ottica **mobile first**, combina usabilità, sicurezza e modernità.
 - **GitHub** per la collaborazione e version control  
 - Utilizzo di **librerie esterne** per funzioni avanzate:  
   - 📅 Gestione calendario  
-  - 🔑 OTP Authentication  
+  - 🔑 OTP Authentication 
+
+**Progetto realizzato con il supporto di DEVELHOPE SRL** 
 
