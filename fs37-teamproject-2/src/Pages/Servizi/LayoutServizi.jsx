@@ -14,8 +14,7 @@ export default function LayoutServizi() {
     <div className="min-h-screen w-full">
       <div className="max-w-5xl mx-auto px-4 py-6">
         <h1
-          className="text-2xl sm:text-3xl font-bold mb-5"
-          style={{ color: "#006450" }}
+          className="text-2xl sm:text-3xl text-[#006450] font-bold mb-5"
         >
           La mia bacheca
         </h1>

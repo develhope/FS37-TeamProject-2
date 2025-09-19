@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "../../Components/Button";
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Legenda from "../../Components/Legenda";
 
 function ASLPiuVicina() {
   // Stato per la lista delle ASL e l'ASL selezionata
@@ -52,9 +53,18 @@ function ASLPiuVicina() {
 
     return (
   <div className="p-8">
+    <div className="flex gap-1 justify-between">
+
     <h2 className="text-3xl text-center font-bold mb-6 text-[#006450]">
       Centri ASL disponibili
     </h2>
+      <a
+      href={'#info'}
+      className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#006450] text-white text-xs font-bold"
+      >
+      i
+    </a>
+      </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {centri.map((asl) => (
         <div
@@ -83,6 +93,13 @@ function ASLPiuVicina() {
           </div>
         </div>
       ))}
+      <Legenda id="info"label='Info'>
+<div className="flex flex-wrap items-center gap-4 text-xs text-gray-700">
+            <span className="inline-flex items-center gap-2">
+              Seleziona la tua ASL dall'elenco disponibile.
+            </span>
+          </div>
+      </Legenda>
     </div>
   </div>
 );

@@ -6,6 +6,7 @@ import itLocale from "@fullcalendar/core/locales/it";
 import { useAuth } from "../../Context/AuthContext";
 import { Button } from "../../Components/Button";
 import { Input } from "../../Components/Input";
+import Legenda from "../../Components/Legenda";
 
 function sameDay(a, b) {
   return (
@@ -47,16 +48,17 @@ export default function Prenotazioni() {
       const response = await result.json();
       if (result.ok) {
         setMessage(`Prenotazione avvenuta con successo`);
-        setTimeout(()=>{
-          setMessage(null)
-        },2000)
+        setTimeout(() => {
+          setMessage(null);
+          setPrenota(false);
+        }, 2000);
       }
     } catch (error) {
       console.error(error);
       setMessage(`Errore in fase di prenotazione`);
-      setTimeout(()=>{
-          setMessage(null)
-        },2000)
+      setTimeout(() => {
+        setMessage(null);
+      }, 2000);
     }
   }
   useEffect(() => {
@@ -293,13 +295,21 @@ export default function Prenotazioni() {
       )}
 
       {message && <p>{message}</p>}
-      <Button label="primary" operazione={() => setPrenota(!prenota)}>
-        Prenota
-      </Button>
-      { !message && prenota ? (
-        <form onSubmit={handlePrenota}>
-          <label>Seleziona servizio</label>
-          <select onChange={(e) => setServizio(e.target.value)}>
+      {!prenota && (
+        <Button label="primary" operazione={() => setPrenota(true)}>
+          Prenota
+        </Button>
+      )}
+      {!message && prenota ? (
+        <form className="flex flex-col gap-1 mt-5" onSubmit={handlePrenota}>
+          <h2 className="text-2xl text-[#006450] font-bold">
+            Prenota la tua visita
+          </h2>
+          <label>Seleziona tipo di visita</label>
+          <select
+            className="block w-full appearance-none rounded-lg border border-[#006450] bg-white px-3 py-2 pr-9 text-sm text-gray-900 shadow-sm focus:border-[#006450] focus:outline-none focus:ring-2 focus:ring-[#006450] disabled:cursor-not-allowed disabled:bg-gray-100"
+            onChange={(e) => setServizio(e.target.value)}
+          >
             {servizi.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.nome}
@@ -307,13 +317,17 @@ export default function Prenotazioni() {
             ))}
           </select>
           <label>Seleziona Medico</label>
-          <select onChange={(e) => setMedico(e.target.value)}>
+          <select
+            className="block w-full appearance-none rounded-lg border border-[#006450] bg-white px-3 py-2 pr-9 text-sm text-gray-900 shadow-sm focus:border-[#006450] focus:outline-none focus:ring-2 focus:ring-[#006450] disabled:cursor-not-allowed disabled:bg-gray-100"
+            onChange={(e) => setMedico(e.target.value)}
+          >
             {medici.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.nome} {m.cognome}
               </option>
             ))}
           </select>
+          <label>Scegli data e orario</label>
           <Input
             onChange={(e) => setGiorno(e.target.value)}
             type="date"
@@ -328,13 +342,24 @@ export default function Prenotazioni() {
             mode={"defaultInput"}
             value={orario}
           />
-          <Button type="submit" label="primary">
-            Prenota
-          </Button>
+          <div className="mt-3">
+            <Button type="submit" label="primary">
+              Prenota
+            </Button>
+          </div>
         </form>
       ) : (
         ""
       )}
+      <Legenda id="info" label="Info">
+        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-700">
+          <span className="inline-flex items-center gap-2">
+            Clicca su prenota per prenotare una visita.
+            <br />
+            Clicca sull'evento del calendario per maggiori info.
+          </span>
+        </div>
+      </Legenda>
     </div>
   );
 }
