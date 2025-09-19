@@ -21,7 +21,7 @@ Pensata in ottica **mobile first**, combina usabilità, sicurezza e modernità.
 - **TailwindCSS** per uno stile moderno e veloce  
 - **GitHub** per la collaborazione e version control  
 - Utilizzo di **librerie esterne** per funzioni avanzate:  
-  - 📅 Gestione calendario  
+  - 📅 Gestione calendario prenotazioni  
   - 🔑 OTP Authentication 
 
 **Progetto realizzato con il supporto di DEVELHOPE SRL** 
