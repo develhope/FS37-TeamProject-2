@@ -33,6 +33,7 @@ function AuthProvider({ children }) {
         localStorage.setItem("topSecretB32", secret.base32);
         setTimeout(() => {
           navigate("/conferma-otp?next=/dashboard");
+          setMessage("");
         }, 2000);
       } else {
         setMessage(data.message);
