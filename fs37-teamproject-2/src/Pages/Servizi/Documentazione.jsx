@@ -102,7 +102,7 @@ function Documentazione() {
   const documenti = [
     {
       id: 1,
-      numero: "PRN1001",
+      numero: "PRN1000",
       data: "2025-09-01",
       stato: "Completato",
       tipoServizio: "Visita",
@@ -116,21 +116,21 @@ function Documentazione() {
     },
     {
       id: 3,
-      numero: "PRN1003",
+      numero: "PRN1004",
       data: "2025-09-03",
       stato: "Confermato",
       tipoServizio: "Controllo",
     },
     {
       id: 4,
-      numero: "PRN1004",
+      numero: "PRN1007",
       data: "2025-09-04",
       stato: "Completato",
       tipoServizio: "Visita",
     },
     {
       id: 5,
-      numero: "PRN1005",
+      numero: "PRN1025",
       data: "2025-09-05",
       stato: "Annullato",
       tipoServizio: "Farmaci",
@@ -216,7 +216,7 @@ function Documentazione() {
                     </span>
                   </span>
                   {/* Data */}
-                  <span className="inline-flex items-center gap-2 px-2 py-1 rounded-lg border border-[#F5F5DC] bg-white">
+                  <span className="flex items-center justify-between gap-2 px-2 py-1 rounded-lg border border-[#F5F5DC] bg-white">
                     <CalendarIcon className="h-4 w-4 text-[#1F2937]" />
                     <span className="text-xs font-medium text-[#1F2937]">
                       {fmtIT(x.data)}
