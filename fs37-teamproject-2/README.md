@@ -1,12 +1,20 @@
-# React + Vite
+# 📱 MiCurApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**MiCurApp** è un’app innovativa dedicata al settore sanitario, progettata per **facilitare i servizi all’interno della nostra struttura**.  
+Pensata in ottica **mobile first**, combina usabilità, sicurezza e modernità.
 
-Currently, two official plugins are available:
+## 👩‍💻 Sviluppatori
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Elena Lucci
+- Francesca Canstangia
+- Carlo Ganci
+- Christian Sestito
 
-## Expanding the ESLint configuration
+## 🚀 Caratteristiche principali
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Design **mobile first** e **responsive**
+- Ottimizzazione **SEO**
+- Architettura **sicura e moderna**
+- **Autenticazione con OTP**
+- **Rotte protette** e gestione utenti
+- Esperienza utente semplice e intuitiva
