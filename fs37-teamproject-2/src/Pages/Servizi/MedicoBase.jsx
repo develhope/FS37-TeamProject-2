@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { Button } from "../../Components/Button";
+import Legenda from "../../Components/Legenda";
 
 function MedicoBase() {
   const navigate = useNavigate();
@@ -51,9 +52,18 @@ function MedicoBase() {
 
   return (
     <div className="p-8">
-      <h2 className="text-3xl text-center font-bold mb-6 text-[#006450]">
-        Medici disponibili
-      </h2>
+      <div className="flex gap-1 justify-between">
+
+    <h2 className="text-3xl text-center font-bold mb-6 text-[#006450]">
+      Medici disponibili
+    </h2>
+      <a
+      href={'#info'}
+      className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#006450] text-white text-xs font-bold"
+      >
+      i
+    </a>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {mediciDisponibili.map((medico) => (
           <div
@@ -89,10 +99,16 @@ function MedicoBase() {
             </div>
           </div>
         ))}
+        <Legenda id="info"label='Info'>
+<div className="flex flex-wrap items-center gap-4 text-xs text-gray-700">
+            <span className="inline-flex items-center gap-2">
+              Seleziona il tuo medico di base dai medici disponibili.
+            </span>
+          </div>
+      </Legenda>
       </div>
     </div>
   );
 }
 
-// Esportiamo il componente come default
 export default MedicoBase;

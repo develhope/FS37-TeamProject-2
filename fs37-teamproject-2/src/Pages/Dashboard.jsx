@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Button } from "../Components/Button";
 import { useNavigate } from "react-router-dom";
+import { EditIcon } from "./Servizi/Documentazione";
 import Navbar from "../Components/Navbar";
 
 function Dashboard() {
@@ -10,6 +11,7 @@ function Dashboard() {
   const [medico, setMedico] = useState(null);
   const [asl, setAsl] = useState(null);
   const [editing, setEditing] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -162,11 +164,12 @@ function Dashboard() {
               <div className="flex mt-3">
                 <Button
                   label="primary"
-                  className="w-36 h-10"
+                  className="p-1.5 rounded-md border border-gray-200"
                   operazione={() => setEditing(true)}
                 >
-                  Modifica
+                  <EditIcon className="h-5 w-5 text-neutral-50" />
                 </Button>
+                
               </div>
             </div>
           )}
@@ -178,32 +181,45 @@ function Dashboard() {
 
           {elenco.length > 0 ? (
             <div className="space-y-4">
-              {elenco.map((prenotazione, i) => (
-                <div
-                  key={i}
-                  className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
-                >
-                  <div className="flex-grow space-y-1">
-                    <p>
-                      <strong>Nome:</strong> {prenotazione.nome_servizio}
-                    </p>
-                    <p>
-                      <strong>Tipologia:</strong>{" "}
-                      {prenotazione.tipologia_servizio}
-                    </p>
-                  </div>
+              {(elenco.slice(0, 3)).map(
+                (prenotazione, i) => (
+                  <div
+                    key={i}
+                    className="flex space-x-4 items-center bg-gray-50 p-4 rounded-xl border"
+                  >
+                    <div className="flex-grow space-y-1">
+                      <p>
+                        <strong>Nome:</strong> {prenotazione.nome_servizio}
+                      </p>
+                      <p>
+                        <strong>Tipologia:</strong>{" "}
+                        {prenotazione.tipologia_servizio}
+                      </p>
+                    </div>
 
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      label="primary"
-                      className="w-36 h-10"
-                      operazione={() => navigate("/servizi/prenotazioni")}
-                    >
-                      Vedi
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        label="primary"
+                        className="w-36 h-10"
+                        operazione={() => navigate("/servizi/prenotazioni")}
+                      >
+                        Vedi
+                      </Button>
+                    </div>
                   </div>
+                )
+              )}
+              {elenco.length > 3 && (
+                <div className="flex mt-4">
+                  <Button
+                    label="primary"
+                    className="w-36 h-10"
+                    operazione={() => navigate("/servizi/prenotazioni")}
+                  >
+                    Vedi tutte
+                  </Button>
                 </div>
-              ))}
+              )}
             </div>
           ) : (
             <div className="flex flex-col items-start space-y-4">
