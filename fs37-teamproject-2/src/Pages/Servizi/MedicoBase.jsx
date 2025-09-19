@@ -51,7 +51,7 @@ function MedicoBase() {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-2">
       <div className="flex gap-1 justify-between">
 
     <h2 className="text-3xl text-center font-bold mb-6 text-[#006450]">

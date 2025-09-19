@@ -6,12 +6,12 @@ import Navbar from "../../Components/Navbar";
 export default function LayoutServizi() {
   return (
     <div className="min-h-screen w-full">
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        <h1
-          className="text-2xl sm:text-3xl text-[#006450] font-bold mb-5"
+      <div className="max-w-5xl mx-auto px-4 py-6 pt-8">
+        <h2
+          className="text-4xl sm:text-4xl text-[#006450] font-bold mb-5"
         >
-          La mia bacheca
-        </h1>
+          La mia Bacheca
+        </h2>
     <Navbar/>
 
         {/* Contenuto */}
