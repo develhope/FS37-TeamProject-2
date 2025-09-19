@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../../Components/Button";
+import Legenda from "../../Components/Legenda";
 
 /** Icone inline */
 const EyeIcon = (props) => (
@@ -252,10 +253,7 @@ function Documentazione() {
         </ul>
 
         {/* Legenda (mobile) */}
-        <div className="mt-4 rounded-xl border border-gray-200 bg-white p-3">
-          <p className="text-xs font-medium text-gray-700 mb-2">
-            Legenda stati
-          </p>
+        <Legenda label="Legenda Stati">
           <div className="flex flex-wrap items-center gap-4 text-xs text-gray-700">
             <span className="inline-flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-green-500" /> Verde =
@@ -274,7 +272,7 @@ function Documentazione() {
               Annullato
             </span>
           </div>
-        </div>
+        </Legenda>
       </div>
     </div>
   );
